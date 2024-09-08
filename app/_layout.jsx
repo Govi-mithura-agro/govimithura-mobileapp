@@ -44,6 +44,16 @@ export default function App() {
           headerStyle: { backgroundColor: "#379137" },
         }}
       />
+      <Stack.Screen
+        name="ForgotPasswordScreen"
+        options={{
+          headerShown: true,
+          headerTitle: "",
+          headerShadowVisible: false,
+          headerTintColor: "white",
+          headerStyle: { backgroundColor: "#379137" },
+        }}
+      />
     </Stack>
   );
 }

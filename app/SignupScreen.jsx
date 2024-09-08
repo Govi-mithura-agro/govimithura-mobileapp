@@ -1,3 +1,4 @@
+import Link from "@react-navigation/native/src/Link";
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -29,9 +30,9 @@ const SignupScreen = () => {
 
                 <View style={styles.loginContainer}>
                     <Text style={styles.loginText}>Have an account? </Text>
-                    <TouchableOpacity>
+                    <Link to='/LoginScreen'>
                         <Text style={styles.loginLink}>Log in</Text>
-                    </TouchableOpacity>
+                    </Link>
                 </View>
 
                 <Text style={styles.termsText}>

@@ -34,10 +34,9 @@ const LoginScreen = () => {
             />
 
             {/* Forgot Password */}
-            <TouchableOpacity onPress={() => alert('Forgot Password?')}>
+            <Link to='/ForgotPasswordScreen' style={styles.forgotPasswordLink}>
                 <Text style={styles.forgotPassword}>Forgot Password?</Text>
-            </TouchableOpacity>
-
+            </Link>
             {/* Login Button */}
             <TouchableOpacity style={styles.loginButton}>
                 <Text style={styles.loginButtonText}>LOGIN</Text>
@@ -110,6 +109,9 @@ const styles = StyleSheet.create({
         color: '#379137',
         fontWeight: 'bold',
     },
+    forgotPasswordLink: {
+        marginBottom: 30,
+    }
 });
 
 export default LoginScreen;
