@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useRouter } from 'expo-router';
+import { Link } from "@react-navigation/native";
 
 const CategoryItem = ({ icon, title }) => (
     <TouchableOpacity style={styles.categoryItem}>
