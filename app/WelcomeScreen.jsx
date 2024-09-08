@@ -1,7 +1,12 @@
+import { Link } from "expo-router";
 import React from 'react';
 import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';
 
 const WelcomeScreen = () => {
+
+    const router = useRouter();
+
     return (
         <View style={styles.container}>
             {/* Logo */}
@@ -15,10 +20,12 @@ const WelcomeScreen = () => {
             <Text style={styles.welcomeText}>Welcome !</Text>
 
             {/* Buttons for Language Selection */}
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity
+                style={styles.button}
+                onPress={() => router.push('/LoginSignupScreen')}
+            >
                 <Text style={styles.buttonText}>English</Text>
             </TouchableOpacity>
-
             <TouchableOpacity style={styles.button}>
                 <Text style={styles.buttonText}>Sinhala</Text>
             </TouchableOpacity>
