@@ -1,7 +1,11 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { useRouter } from 'expo-router';
 
 const LoginSignupScreen = () => {
+
+    const router = useRouter();
+
     return (
         <View style={styles.container}>
             <Image
@@ -13,10 +17,10 @@ const LoginSignupScreen = () => {
             <Text style={styles.description}>
                 Your app for accurate and efficient measurements in the real world.
             </Text>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={() => router.push('/LoginScreen')} >
                 <Text style={styles.buttonText}>LOGIN</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.button, styles.signupButton]}>
+            <TouchableOpacity style={[styles.button, styles.signupButton]} onPress={() => router.push('/SignupScreen')}>
                 <Text style={styles.buttonText}>SIGN UP</Text>
             </TouchableOpacity>
         </View>
@@ -51,7 +55,7 @@ const styles = StyleSheet.create({
         color: '#555555',
     },
     button: {
-        backgroundColor: '#2E7D32',
+        backgroundColor: '#379137',
         paddingVertical: 12,
         paddingHorizontal: 40,
         borderRadius: 10,

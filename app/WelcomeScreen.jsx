@@ -48,11 +48,11 @@ const styles = StyleSheet.create({
     welcomeText: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: '#2E7D32',  // Green color for text
+        color: '#379137',  // Green color for text
         marginBottom: 20,
     },
     button: {
-        backgroundColor: '#2E7D32',  // Green button background
+        backgroundColor: '#379137',  // Green button background
         paddingVertical: 12,
         paddingHorizontal: 40,
         borderRadius: 10,
