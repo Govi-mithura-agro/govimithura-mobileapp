@@ -1,8 +1,10 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useRouter } from 'expo-router';
 
 const OTPVerificationScreen = () => {
+    const router = useRouter();
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
     const inputRefs = useRef([]);
 
@@ -37,7 +39,7 @@ const OTPVerificationScreen = () => {
                         />
                     ))}
                 </View>
-                <TouchableOpacity style={styles.continueButton}>
+                <TouchableOpacity style={styles.continueButton} onPress={() => router.push('/HomeScreen')} >
                     <Text style={styles.continueButtonText}>Continue</Text>
                 </TouchableOpacity>
             </View>

@@ -64,6 +64,12 @@ export default function App() {
           headerStyle: { backgroundColor: "#379137" },
         }}
       />
+      <Stack.Screen
+        name="HomeScreen"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
     
   );

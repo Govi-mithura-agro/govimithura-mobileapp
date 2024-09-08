@@ -4,7 +4,7 @@ import { Link, useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 
 const LoginScreen = () => {
-    
+
     const router = useRouter();
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
@@ -41,7 +41,7 @@ const LoginScreen = () => {
                 <Text style={styles.forgotPassword}>Forgot Password?</Text>
             </Link>
             {/* Login Button */}
-            <TouchableOpacity style={styles.loginButton} onPress={() => router.push('/OTPVerificationScreen')} >
+            <TouchableOpacity style={styles.loginButton} onPress={() => router.push('/HomeScreen')} >
                 <Text style={styles.loginButtonText}>LOGIN</Text>
             </TouchableOpacity>
 

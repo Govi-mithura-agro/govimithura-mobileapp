@@ -2,8 +2,10 @@ import Link from "@react-navigation/native/src/Link";
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useRouter } from 'expo-router';
 
 const SignupScreen = () => {
+    const router = useRouter();
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.content}>
@@ -24,7 +26,7 @@ const SignupScreen = () => {
                     <Text style={styles.checkboxLabel}>Save for later</Text>
                 </View>
 
-                <TouchableOpacity style={styles.signUpButton}>
+                <TouchableOpacity style={styles.signUpButton} onPress={() => router.push('/OTPVerificationScreen')}>
                     <Text style={styles.signUpButtonText}>SIGN UP</Text>
                 </TouchableOpacity>
 
