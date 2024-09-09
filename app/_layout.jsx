@@ -73,7 +73,11 @@ export default function App() {
       <Stack.Screen
         name="AppointmentScreen"
         options={{
-          headerShown: false,
+          headerShown: true,
+          headerTitle: "Appiontment",
+          headerShadowVisible: false,
+          headerTintColor: "white",
+          headerStyle: { backgroundColor: "#379137" },
         }}
       />
     </Stack>

@@ -18,13 +18,6 @@ const AppointmentScreen = () => {
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContent}>
-                <View style={styles.header}>
-                    <TouchableOpacity style={styles.backButton}>
-                        <Icon name="arrow-left" size={24} color="#000" />
-                    </TouchableOpacity>
-                    <Text style={styles.headerTitle}>Appointment</Text>
-                </View>
-
                 <View style={styles.formContainer}>
                     <Text style={styles.formTitle}>Fill Your Issue</Text>
 
@@ -78,14 +71,6 @@ const styles = StyleSheet.create({
     scrollContent: {
         padding: 20,
     },
-    header: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 20,
-    },
-    backButton: {
-        marginRight: 10,
-    },
     headerTitle: {
         fontSize: 20,
         fontWeight: 'bold',
@@ -129,7 +114,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     continueButton: {
-        backgroundColor: '#006B3E',
+        backgroundColor: '#379137',
         padding: 15,
         borderRadius: 5,
         alignItems: 'center',

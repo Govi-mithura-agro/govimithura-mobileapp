@@ -4,15 +4,17 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useRouter } from 'expo-router';
 import { Link } from "@react-navigation/native";
 
-const CategoryItem = ({ icon, title }) => (
-    <TouchableOpacity style={styles.categoryItem}>
-        <View style={styles.categoryIcon}>
-            <Icon name={icon} size={24} color="#fff" />
-        </View>
-        <Text style={styles.categoryTitle}>{title}</Text>
-    </TouchableOpacity>
-);
-
+const CategoryItem = ({ icon, title, route }) => {
+    const router = useRouter();
+    return (
+        <TouchableOpacity style={styles.categoryItem} onPress={() => router.push(route)}>
+            <View style={styles.categoryIcon}>
+                <Icon name={icon} size={24} color="#fff" />
+            </View>
+            <Text style={styles.categoryTitle}>{title}</Text>
+        </TouchableOpacity>
+    );
+};
 const InfoCard = ({ title, description }) => (
     <View style={styles.infoCard}>
         <Text style={styles.infoTitle}>{title}</Text>
@@ -21,6 +23,7 @@ const InfoCard = ({ title, description }) => (
 );
 
 const HomeScreen = () => {
+    const router = useRouter();
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -36,10 +39,10 @@ const HomeScreen = () => {
 
                 <Text style={styles.sectionTitle}>Category</Text>
                 <View style={styles.categoryContainer}>
-                    <CategoryItem icon="sprout" title="Crops Prediction" />
-                    <CategoryItem icon="map-marker" title="Land Measure" />
-                    <CategoryItem icon="calendar-clock" title="Appointment" />
-                    <CategoryItem icon="newspaper" title="News" />
+                    <CategoryItem icon="sprout" title="Crops Prediction" route="CropsPredictionScreen" />
+                    <CategoryItem icon="map-marker" title="Land Measure" route="LandMeasureScreen" />
+                    <CategoryItem icon="calendar-clock" title="Appointment" route="AppointmentScreen" />
+                    <CategoryItem icon="newspaper" title="News" route="NewsScreen" />
                 </View>
 
                 <InfoCard
