@@ -1,8 +1,10 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useRouter } from 'expo-router';
 
 const AppointmentFileUploadScreen = () => {
+  const router = useRouter();
   const handleOpenFile = () => {
     // Implement file picker functionality here
     console.log('Open file picker');
@@ -30,11 +32,11 @@ const AppointmentFileUploadScreen = () => {
           <Text style={styles.openFileButtonText}>Open file</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
+        <TouchableOpacity style={styles.skipButton} onPress={() => router.push('/AppointmentSummaryScreen')}>
           <Text style={styles.skipButtonText}>Skip</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
+        <TouchableOpacity style={styles.continueButton} onPress={() => router.push('/AppointmentSummaryScreen')}>
           <Text style={styles.continueButtonText}>Continue</Text>
         </TouchableOpacity>
       </View>
