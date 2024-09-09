@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useRouter } from 'expo-router';
 
 const DropdownInput = ({ label, placeholder }) => (
     <TouchableOpacity style={styles.dropdownInput}>
@@ -13,6 +14,7 @@ const DropdownInput = ({ label, placeholder }) => (
 );
 
 const AppointmentScreen = () => {
+    const router = useRouter();
     const [phoneNumber, setPhoneNumber] = useState('+94 XXXXXXXX');
 
     return (
@@ -36,7 +38,7 @@ const AppointmentScreen = () => {
                     </View>
                 </View>
 
-                <TouchableOpacity style={styles.continueButton}>
+                <TouchableOpacity style={styles.continueButton} onPress={() => router.push('/AppointmentVoiceTextScreen')}>
                     <Text style={styles.continueButtonText}>Continue</Text>
                 </TouchableOpacity>
             </ScrollView>
@@ -47,8 +49,8 @@ const AppointmentScreen = () => {
                     <Text style={styles.navText}>Home</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem}>
-                    <Icon name="format-list-bulleted" size={24} color="#006B3E" />
-                    <Text style={[styles.navText, styles.activeNavText]}>Appointment</Text>
+                    <Icon name="format-list-bulleted" size={24} color="#888" />
+                    <Text style={[styles.navText]}>Appointment</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem}>
                     <Icon name="bell-outline" size={24} color="#888" />

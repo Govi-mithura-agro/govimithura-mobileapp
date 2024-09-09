@@ -80,6 +80,16 @@ export default function App() {
           headerStyle: { backgroundColor: "#379137" },
         }}
       />
+      <Stack.Screen
+        name="AppointmentVoiceTextScreen"
+        options={{
+          headerShown: true,
+          headerTitle: "Appiontment",
+          headerShadowVisible: false,
+          headerTintColor: "white",
+          headerStyle: { backgroundColor: "#379137" },
+        }}
+      />
     </Stack>
     
   );
