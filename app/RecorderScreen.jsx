@@ -155,8 +155,8 @@ const RecorderScreen = () => {
                     <Text style={styles.navText}>Home</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem}>
-                    <Icon name="format-list-bulleted" size={24} color="#006B3E" />
-                    <Text style={[styles.navText, styles.activeNavText]}>Appointment</Text>
+                    <Icon name="format-list-bulleted" size={24} color="#888" />
+                    <Text style={[styles.navText]}>Appointment</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem}>
                     <Icon name="bell-outline" size={24} color="#888" />

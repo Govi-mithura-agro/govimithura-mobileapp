@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useRouter } from 'expo-router';
 
 const AppointmentScreen = () => {
+    const router = useRouter();
     const [message, setMessage] = useState('');
 
     return (
@@ -18,27 +20,27 @@ const AppointmentScreen = () => {
                     />
                 </View>
 
-                <TouchableOpacity style={styles.continueButton}>
+                <TouchableOpacity style={styles.continueButton} onPress={() => router.push('/AppointmentFileUploadScreen')}>
                     <Text style={styles.continueButtonText}>Continue</Text>
                 </TouchableOpacity>
             </View>
 
-            <View style={styles.footer}>
-                <TouchableOpacity style={styles.footerItem}>
+            <View style={styles.bottomNav}>
+                <TouchableOpacity style={styles.navItem}>
                     <Icon name="home" size={24} color="#888" />
-                    <Text style={styles.footerText}>Home</Text>
+                    <Text style={styles.navText}>Home</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.footerItem}>
-                    <Icon name="list" size={24} color="#4CAF50" />
-                    <Text style={[styles.footerText, styles.activeFooterText]}>Appointments</Text>
+                <TouchableOpacity style={styles.navItem}>
+                    <Icon name="format-list-bulleted" size={24} color="#888" />
+                    <Text style={[styles.navText]}>Appointment</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.footerItem}>
-                    <Icon name="notifications" size={24} color="#888" />
-                    <Text style={styles.footerText}>Notifications</Text>
+                <TouchableOpacity style={styles.navItem}>
+                    <Icon name="bell-outline" size={24} color="#888" />
+                    <Text style={styles.navText}>Notifications</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.footerItem}>
-                    <Icon name="person" size={24} color="#888" />
-                    <Text style={styles.footerText}>Profile</Text>
+                <TouchableOpacity style={styles.navItem}>
+                    <Icon name="account" size={24} color="#888" />
+                    <Text style={styles.navText}>Profile</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -80,23 +82,23 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
     },
-    footer: {
+    bottomNav: {
         flexDirection: 'row',
         justifyContent: 'space-around',
         borderTopWidth: 1,
-        borderTopColor: '#e0e0e0',
-        paddingVertical: 8,
+        borderTopColor: '#E0E0E0',
+        paddingVertical: 10,
     },
-    footerItem: {
+    navItem: {
         alignItems: 'center',
     },
-    footerText: {
+    navText: {
         fontSize: 12,
+        marginTop: 5,
         color: '#888',
-        marginTop: 4,
     },
-    activeFooterText: {
-        color: '#4CAF50',
+    activeNavText: {
+        color: '#006B3E',
     },
 });
 
