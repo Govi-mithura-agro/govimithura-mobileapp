@@ -1,8 +1,10 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useRouter } from 'expo-router';
 
 const AppointmentVoiceTextScreen = () => {
+    const router = useRouter();
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.contentContainer}>
@@ -12,7 +14,7 @@ const AppointmentVoiceTextScreen = () => {
                     <View style={styles.iconWrapper}>
                         <Icon name="microphone-outline" size={48} color="black" />
                     </View>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={() => router.push('/RecorderScreen')}>
                         <Text style={styles.buttonText}>Voice message</Text>
                     </TouchableOpacity>
                 </View>
@@ -21,7 +23,7 @@ const AppointmentVoiceTextScreen = () => {
                     <View style={styles.iconWrapper}>
                         <Icon name="message-outline" size={48} color="black" />
                     </View>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={() => router.push('/MessageScreen')}>
                         <Text style={styles.buttonText}>Text message</Text>
                     </TouchableOpacity>
                 </View>
