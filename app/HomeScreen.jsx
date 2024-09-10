@@ -39,7 +39,7 @@ const HomeScreen = () => {
 
                 <Text style={styles.sectionTitle}>Category</Text>
                 <View style={styles.categoryContainer}>
-                    <CategoryItem icon="sprout" title="Crops Prediction" route="CropsPredictionScreen" />
+                    <CategoryItem icon="sprout" title="Crops Prediction" route="CropPrediction" />
                     <CategoryItem icon="map-marker" title="Land Measure" route="LandMeasureScreen" />
                     <CategoryItem icon="calendar-clock" title="Appointment" route="AppointmentScreen" />
                     <CategoryItem icon="newspaper" title="News" route="NewsScreen" />

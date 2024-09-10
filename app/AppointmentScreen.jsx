@@ -24,10 +24,6 @@ const AppointmentScreen = () => {
                     <Text style={styles.formTitle}>Fill Your Issue</Text>
 
                     <DropdownInput label="District" placeholder="Select District" />
-                    <DropdownInput label="Divisional Secretarial Region" placeholder="Select Region" />
-                    <DropdownInput label="Grama Niladhari Division" placeholder="Select Division" />
-                    <DropdownInput label="Type of Appointment" placeholder="Select Type" />
-
                     <View style={styles.phoneInputContainer}>
                         <TextInput
                             style={styles.phoneInput}

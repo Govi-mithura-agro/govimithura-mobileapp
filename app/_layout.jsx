@@ -130,6 +130,16 @@ export default function App() {
           headerStyle: { backgroundColor: "#379137" },
         }}
       />
+      <Stack.Screen
+        name="CropPrediction"
+        options={{
+          headerShown: true,
+          headerTitle: "Crop Prediction",
+          headerShadowVisible: false,
+          headerTintColor: "white",
+          headerStyle: { backgroundColor: "#379137" },
+        }}
+      />
     </Stack>
     
   );

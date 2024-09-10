@@ -9,8 +9,6 @@ const AppointmentSummaryScreen = () => {
         Email: 'niduka@gmail.com',
         Contact: '+94 7XXXXXXXX',
         District: 'Badulla',
-        'Divisional Secretarial Region': 'Bandarawela',
-        'Grama Niladhari Division': 'Wewathanne',
     };
 
     const attachments = [
