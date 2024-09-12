@@ -28,45 +28,45 @@ const CropPrediction = () => {
         fetchLocations();
     }, []);
 
-    // Fetch crop factors for the default district (Colombo) and Fetch crops for the default province (Western)
-    // useEffect(() => {
-    //     fetchCropFactorsAndCrops(selectedDistrict, selectedProvince);
-    // }, [selectedDistrict, selectedProvince]);
+    //Fetch crop factors for the default district (Colombo) and Fetch crops for the default province (Western)
+    useEffect(() => {
+        fetchCropFactorsAndCrops(selectedDistrict, selectedProvince);
+    }, [selectedDistrict, selectedProvince]);
 
-    // Function to fetch crop factors based on district and crops based on province
-    // const fetchCropFactorsAndCrops = (district, province) => {
-    //     axios
-    //         .get(`http://localhost:5000/api/cropfactors/getcropfactors/${district}`)
-    //         .then((response) => {
-    //             if (response.data && response.data.cropfactor) {
-    //                 setCropFactor(response.data.cropfactor);
-    //                 setNotFound(false); // Reset the notFound state
-    //             } else {
-    //                 setCropFactor(null);
-    //                 setNotFound(true); // Set notFound to true when no data is found
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             console.error("Error fetching crop factors:", error);
-    //             setCropFactor(null);
-    //             setNotFound(true); // Set notFound to true when an error occurs
-    //         });
+    //Function to fetch crop factors based on district and crops based on province
+    const fetchCropFactorsAndCrops = (district, province) => {
+        axios
+            .get(`http://192.168.43.196:5000/api/cropfactors/getcropfactors/${district}`)
+            .then((response) => {
+                if (response.data && response.data.cropfactor) {
+                    setCropFactor(response.data.cropfactor);
+                    setNotFound(false); //Reset the notFound state
+                } else {
+                    setCropFactor(null);
+                    setNotFound(true); //Set notFound to true when no data is found
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching crop factors:", error);
+                setCropFactor(null);
+                setNotFound(true); //Set notFound to true when an error occurs
+            });
 
-    //     axios
-    //         .get(`http://localhost:5000/api/crops/getcropdata/${province}`)
-    //         .then((response) => {
-    //             if (response.data && response.data.crop) {
-    //                 setCrops(response.data.crop);
-    //                 setNotFound(false); // Reset the notFound state
-    //             } else {
-    //                 setCrops(null);
-    //             }
-    //         })
-    //         .catch((error) => {
-    //             console.error("Error fetching crops:", error);
-    //             setCrops(null);
-    //         });
-    // };
+        axios
+            .get(`http://192.168.43.196:5000/api/crops/getcropdata/${province}`)
+            .then((response) => {
+                if (response.data && response.data.crop) {
+                    setCrops(response.data.crop);
+                    setNotFound(false); //Reset the notFound state
+                } else {
+                    setCrops(null);
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching crops:", error);
+                setCrops(null);
+            });
+    };
 
     const handleMarkerPress = (district, province) => {
         setSelectedDistrict(district);
