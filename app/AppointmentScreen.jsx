@@ -1,21 +1,50 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useRouter } from 'expo-router';
+import { Picker } from '@react-native-picker/picker';
+import { useNavigation } from '@react-navigation/native';
 
-const DropdownInput = ({ label, placeholder }) => (
-    <TouchableOpacity style={styles.dropdownInput}>
+const districts = [
+    'Ampara', 'Anuradhapura', 'Badulla', 'Batticaloa', 'Colombo',
+    'Galle', 'Gampaha', 'Hambantota', 'Jaffna', 'Kalutara',
+    'Kandy', 'Kegalle', 'Kilinochchi', 'Kurunegala', 'Mannar',
+    'Matale', 'Matara', 'Moneragala', 'Mullaitivu', 'Nuwara Eliya',
+    'Polonnaruwa', 'Puttalam', 'Ratnapura', 'Trincomalee', 'Vavuniya'
+];
+
+const DropdownInput = ({ label, selectedValue, onValueChange }) => (
+    <View style={styles.dropdownInput}>
         <Text style={styles.inputLabel}>{label}</Text>
         <View style={styles.dropdownContent}>
-            <Text style={styles.placeholderText}>{placeholder}</Text>
-            <Icon name="chevron-down" size={24} color="#888" />
+            <Picker
+                selectedValue={selectedValue}
+                style={styles.picker}
+                onValueChange={(itemValue) => onValueChange(itemValue)}
+            >
+                <Picker.Item label="Select District" value="" />
+                {districts.map((district) => (
+                    <Picker.Item label={district} value={district} key={district} />
+                ))}
+            </Picker>
         </View>
-    </TouchableOpacity>
+    </View>
 );
 
 const AppointmentScreen = () => {
-    const router = useRouter();
-    const [phoneNumber, setPhoneNumber] = useState('+94 XXXXXXXX');
+    const navigation = useNavigation();
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [district, setDistrict] = useState("");
+
+    const handleContinue = () => {
+        if (district && phoneNumber) {
+            navigation.navigate('AppointmentVoiceTextScreen', {
+                district,
+                phone: phoneNumber
+            });
+        } else {
+            console.log("Please select a district and enter a phone number");
+        }
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -23,9 +52,15 @@ const AppointmentScreen = () => {
                 <View style={styles.formContainer}>
                     <Text style={styles.formTitle}>Fill Your Issue</Text>
 
-                    <DropdownInput label="District" placeholder="Select District" />
+                    <DropdownInput
+                        label="Select District"
+                        selectedValue={district}
+                        onValueChange={(value) => setDistrict(value)}
+                    />
+
                     <View style={styles.phoneInputContainer}>
                         <TextInput
+                            placeholder="07XXXXXXXX"
                             style={styles.phoneInput}
                             value={phoneNumber}
                             onChangeText={setPhoneNumber}
@@ -34,7 +69,7 @@ const AppointmentScreen = () => {
                     </View>
                 </View>
 
-                <TouchableOpacity style={styles.continueButton} onPress={() => router.push('/AppointmentVoiceTextScreen')}>
+                <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
                     <Text style={styles.continueButtonText}>Continue</Text>
                 </TouchableOpacity>
             </ScrollView>
@@ -46,7 +81,7 @@ const AppointmentScreen = () => {
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem}>
                     <Icon name="format-list-bulleted" size={24} color="#888" />
-                    <Text style={[styles.navText]}>Appointment</Text>
+                    <Text style={styles.navText}>Appointment</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem}>
                     <Icon name="bell-outline" size={24} color="#888" />
@@ -93,15 +128,13 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     dropdownContent: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
         backgroundColor: '#fff',
         borderRadius: 5,
-        padding: 10,
+        padding: 5,
     },
-    placeholderText: {
-        color: '#888',
+    picker: {
+        height: 50,
+        width: '100%',
     },
     phoneInputContainer: {
         backgroundColor: '#fff',

@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useRouter } from 'expo-router';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const AppointmentScreen = () => {
-    const router = useRouter();
+    const navigation = useNavigation();
+    const route = useRoute();
+    const { district, phone } = route.params;
     const [message, setMessage] = useState('');
 
     return (
         <SafeAreaView style={styles.container}>
+            <Text style={styles.infoText}>Selected District: {district}</Text>
+            <Text style={styles.infoText}>Phone Number: {phone}</Text>
             <View style={styles.content}>
                 <View style={styles.messageContainer}>
                     <TextInput

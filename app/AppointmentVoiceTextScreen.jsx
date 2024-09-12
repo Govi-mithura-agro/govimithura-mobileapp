@@ -1,20 +1,42 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, Image } from 'react-native';
+import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useRouter } from 'expo-router';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const AppointmentVoiceTextScreen = () => {
-    const router = useRouter();
+    const navigation = useNavigation();
+    const route = useRoute();
+    const { district, phone } = route.params;
+
+    const handleContinueTextMessage = () => {
+        if (district && phone) {
+            navigation.navigate('MessageScreen', {
+                district,
+                phone
+            });
+        } else {
+            console.log("Please select a district and enter a phone number");
+        }
+    };
+
+    const handleContinueVoicMessage = () => {
+        
+    };
+
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.contentContainer}>
-                <Text style={styles.title}>Fill Your Issue</Text>
+                <Text style={styles.title}>Your Issue Details</Text>
+
+                <Text style={styles.infoText}>Selected District: {district}</Text>
+                <Text style={styles.infoText}>Phone Number: {phone}</Text>
 
                 <View style={styles.iconContainer}>
                     <View style={styles.iconWrapper}>
                         <Icon name="microphone-outline" size={48} color="black" />
                     </View>
-                    <TouchableOpacity style={styles.button} onPress={() => router.push('/RecorderScreen')}>
+                    <TouchableOpacity style={styles.button} onPress={handleContinueVoicMessage}>
                         <Text style={styles.buttonText}>Voice message</Text>
                     </TouchableOpacity>
                 </View>
@@ -23,12 +45,13 @@ const AppointmentVoiceTextScreen = () => {
                     <View style={styles.iconWrapper}>
                         <Icon name="message-outline" size={48} color="black" />
                     </View>
-                    <TouchableOpacity style={styles.button} onPress={() => router.push('/MessageScreen')}>
+                    <TouchableOpacity style={styles.button} onPress={handleContinueTextMessage}>
                         <Text style={styles.buttonText}>Text message</Text>
                     </TouchableOpacity>
                 </View>
             </View>
 
+            {/* Bottom Navigation */}
             <View style={styles.bottomNav}>
                 <TouchableOpacity style={styles.navItem}>
                     <Icon name="home" size={24} color="#888" />
@@ -56,10 +79,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
-    headerTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
     contentContainer: {
         flex: 1,
         justifyContent: 'center',
@@ -73,6 +92,10 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 30,
+    },
+    infoText: {
+        fontSize: 16,
+        marginBottom: 20,
     },
     iconContainer: {
         marginBottom: 30,
