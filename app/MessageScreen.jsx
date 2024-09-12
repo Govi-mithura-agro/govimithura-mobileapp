@@ -9,6 +9,18 @@ const AppointmentScreen = () => {
     const { district, phone } = route.params;
     const [message, setMessage] = useState('');
 
+    const handleContinue = () => {
+        if (district && phone && message) {
+            navigation.navigate('AppointmentFileUploadScreen', {
+                district,
+                phone,
+                message
+            });
+        } else {
+            console.log("Please select a district and enter a phone number and enter a message");
+        }
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <Text style={styles.infoText}>Selected District: {district}</Text>
@@ -24,7 +36,7 @@ const AppointmentScreen = () => {
                     />
                 </View>
 
-                <TouchableOpacity style={styles.continueButton} onPress={() => router.push('/AppointmentFileUploadScreen')}>
+                <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
                     <Text style={styles.continueButtonText}>Continue</Text>
                 </TouchableOpacity>
             </View>

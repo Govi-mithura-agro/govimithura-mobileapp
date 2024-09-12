@@ -1,10 +1,13 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useRouter } from 'expo-router';
+import { useNavigation, useRoute } from '@react-navigation/native';
+
 
 const AppointmentFileUploadScreen = () => {
-  const router = useRouter();
+  const navigation = useNavigation();
+  const route = useRoute();
+  const { district, phone, message } = route.params;
   const handleOpenFile = () => {
     // Implement file picker functionality here
     console.log('Open file picker');
@@ -21,8 +24,11 @@ const AppointmentFileUploadScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>      
+    <SafeAreaView style={styles.container}>    
       <View style={styles.content}>
+        <Text style={styles.infoText}>Selected District: {district}</Text>
+        <Text style={styles.infoText}>Phone Number: {phone}</Text>
+        <Text style={styles.infoText}>Message: {message}</Text> 
         <View style={styles.uploadContainer}>
           <Icon name="cloud-upload" size={48} color="#379137" />
           <Text style={styles.uploadText}>Upload your file</Text>
