@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, ScrollView, Alert } from 'react-native'; // Import Alert here
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import axios from "axios";
+
 const AppointmentSummaryScreen = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const { district, phone, message } = route.params;
     const [name, setName] = useState('Abhishek Peiris');
-    const [email, setEmail] = useState('abhisheklpeiris@gmail.com')
+    const [email, setEmail] = useState('abhisheklpeiris@gmail.com');
+
     const summaryData = {
         Name: name,
         Email: email,
@@ -21,6 +24,28 @@ const AppointmentSummaryScreen = () => {
         // { name: '67x28a077639.mp3', size: '00:04:53' },
         // { name: '87x28ag7064u4.png', size: '39 KB' },
     ];
+
+    async function addAppointment() {
+        try {
+            const response = await axios.post("http://192.168.43.196:5000/api/appoinments/addappointment", { // Replace localhost with your IP
+                name: name,
+                email: email,
+                contact: phone,
+                district: district,
+                textmessage: message
+            });
+
+            if (response.status === 200) {
+                Alert.alert("Success", "Appointment added successfully");
+                // Optionally navigate to another screen or clear the form
+                // navigation.navigate('Home');
+            }
+        } catch (error) {
+            console.error("Error adding appointment:", error);
+            Alert.alert("Error", "Failed to add appointment. Please try again.");
+        }
+    }
+
 
     const renderSummaryItem = (label, value) => (
         <View style={styles.summaryItem} key={label}>
@@ -48,7 +73,7 @@ const AppointmentSummaryScreen = () => {
                     {attachments.map(renderAttachment)}
                 </View>
 
-                <TouchableOpacity style={styles.submitButton}>
+                <TouchableOpacity style={styles.submitButton} onPress={addAppointment}>
                     <Text style={styles.submitButtonText}>Submit</Text>
                 </TouchableOpacity>
             </ScrollView>
