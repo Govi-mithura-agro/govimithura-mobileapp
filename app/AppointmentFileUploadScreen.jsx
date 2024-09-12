@@ -14,8 +14,15 @@ const AppointmentFileUploadScreen = () => {
   };
 
   const handleSkip = () => {
-    // Implement skip functionality
-    console.log('Skip pressed');
+    if (district && phone && message) {
+      navigation.navigate('AppointmentSummaryScreen', {
+        district,
+        phone,
+        message
+      });
+    } else {
+      console.log("Please select a district and enter a phone number and enter a message");
+    }
   };
 
   const handleContinue = () => {
@@ -38,11 +45,11 @@ const AppointmentFileUploadScreen = () => {
           <Text style={styles.openFileButtonText}>Open file</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.skipButton} onPress={() => router.push('/AppointmentSummaryScreen')}>
+        <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
           <Text style={styles.skipButtonText}>Skip</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.continueButton} onPress={() => router.push('/AppointmentSummaryScreen')}>
+        <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
           <Text style={styles.continueButtonText}>Continue</Text>
         </TouchableOpacity>
       </View>

@@ -1,19 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
-
+import { useNavigation, useRoute } from '@react-navigation/native';
 const AppointmentSummaryScreen = () => {
+    const navigation = useNavigation();
+    const route = useRoute();
+    const { district, phone, message } = route.params;
+    const [name, setName] = useState('Abhishek Peiris');
+    const [email, setEmail] = useState('abhisheklpeiris@gmail.com')
     const summaryData = {
-        Name: 'Niduka',
-        Email: 'niduka@gmail.com',
-        Contact: '+94 7XXXXXXXX',
-        District: 'Badulla',
+        Name: name,
+        Email: email,
+        Contact: phone,
+        District: district,
+        Message: message
     };
 
     const attachments = [
-        { name: '67x28a077639.mp3', size: '00:04:53' },
-        { name: '87x28ag7064u4.png', size: '39 KB' },
+        // { name: '67x28a077639.mp3', size: '00:04:53' },
+        // { name: '87x28ag7064u4.png', size: '39 KB' },
     ];
 
     const renderSummaryItem = (label, value) => (
