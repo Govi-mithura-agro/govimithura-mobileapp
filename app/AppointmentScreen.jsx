@@ -73,8 +73,6 @@ const AppointmentScreen = () => {
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContent}>
                 <View style={styles.formContainer}>
-                    <Text style={styles.formTitle}>Fill Your Issue</Text>
-
                     <DropdownInput
                         selectedValue={district}
                         onValueChange={(value) => setDistrict(value)}
@@ -128,20 +126,11 @@ const styles = StyleSheet.create({
     scrollContent: {
         padding: 20,
     },
-    headerTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
     formContainer: {
         backgroundColor: '#E8F5E9',
         borderRadius: 10,
         padding: 15,
         marginBottom: 20,
-    },
-    formTitle: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginBottom: 15,
     },
     dropdownInput: {
         marginBottom: 15,
