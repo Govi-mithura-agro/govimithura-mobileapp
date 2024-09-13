@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, SafeAreaView, StyleSheet, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
@@ -18,13 +18,12 @@ const AppointmentScreen = () => {
             });
         } else {
             console.log("Please select a district and enter a phone number and enter a message");
+            Alert.alert("Warning", "Please enter message for your problem");
         }
     };
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.infoText}>Selected District: {district}</Text>
-            <Text style={styles.infoText}>Phone Number: {phone}</Text>
             <View style={styles.content}>
                 <View style={styles.messageContainer}>
                     <TextInput
