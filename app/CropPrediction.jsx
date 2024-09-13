@@ -19,7 +19,7 @@ const CropPrediction = () => {
         // Fetch locations from the API
         const fetchLocations = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/locations');
+                const response = await axios.get('http://192.168.8.155:5000/api/locations');
                 setLocations(response.data);
             } catch (error) {
                 console.error('Error fetching locations:', error);
@@ -36,7 +36,7 @@ const CropPrediction = () => {
     //Function to fetch crop factors based on district and crops based on province
     const fetchCropFactorsAndCrops = (district, province) => {
         axios
-            .get(`http://192.168.43.196:5000/api/cropfactors/getcropfactors/${district}`)
+            .get(`http://192.168.8.155:5000/api/cropfactors/getcropfactors/${district}`)
             .then((response) => {
                 if (response.data && response.data.cropfactor) {
                     setCropFactor(response.data.cropfactor);
@@ -53,7 +53,7 @@ const CropPrediction = () => {
             });
 
         axios
-            .get(`http://192.168.43.196:5000/api/crops/getcropdata/${province}`)
+            .get(`http://192.168.8.155:5000/api/crops/getcropdata/${province}`)
             .then((response) => {
                 if (response.data && response.data.crop) {
                     setCrops(response.data.crop);
