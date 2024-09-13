@@ -33,9 +33,6 @@ const AppointmentFileUploadScreen = () => {
   return (
     <SafeAreaView style={styles.container}>    
       <View style={styles.content}>
-        <Text style={styles.infoText}>Selected District: {district}</Text>
-        <Text style={styles.infoText}>Phone Number: {phone}</Text>
-        <Text style={styles.infoText}>Message: {message}</Text> 
         <View style={styles.uploadContainer}>
           <Icon name="cloud-upload" size={48} color="#379137" />
           <Text style={styles.uploadText}>Upload your file</Text>

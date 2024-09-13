@@ -36,9 +36,17 @@ const AppointmentSummaryScreen = () => {
             });
 
             if (response.status === 200) {
-                Alert.alert("Success", "Appointment added successfully");
-                // Optionally navigate to another screen or clear the form
-                // navigation.navigate('Home');
+                Alert.alert(
+                    "Success",
+                    "Appointment added successfully",
+                    [
+                        {
+                            text: "OK",
+                            onPress: () => navigation.navigate('AppointmentHistory'),
+                        }
+                    ]
+                );
+                
             }
         } catch (error) {
             console.error("Error adding appointment:", error);
