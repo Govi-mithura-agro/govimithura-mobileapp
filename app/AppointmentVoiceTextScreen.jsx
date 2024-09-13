@@ -27,10 +27,6 @@ const AppointmentVoiceTextScreen = () => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.contentContainer}>
-                <Text style={styles.title}>Your Issue Details</Text>
-
-                <Text style={styles.infoText}>Selected District: {district}</Text>
-                <Text style={styles.infoText}>Phone Number: {phone}</Text>
 
                 <View style={styles.iconContainer}>
                     <View style={styles.iconWrapper}>
