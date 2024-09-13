@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
@@ -34,18 +34,41 @@ const AppointmentScreen = () => {
     const navigation = useNavigation();
     const [phoneNumber, setPhoneNumber] = useState('');
     const [district, setDistrict] = useState("");
+    const [error, setError] = useState('');
 
     const handleContinue = () => {
         if (district && phoneNumber) {
-            navigation.navigate('AppointmentVoiceTextScreen', {
-                district,
-                phone: phoneNumber
-            });
+            // Remove any non-numeric characters
+            const numericValue = phoneNumber.replace(/[^0-9]/g, '');
+            // Ensure it starts with "07"
+            if (!numericValue.startsWith("07")) {
+                setError('Phone number must start with "07"');
+                return;
+            }
+            if (numericValue.length > 10) {
+                setError('Phone number should be exactly 10 digits');
+                return;
+            }
+            // Update phone number and validate length
+            if (numericValue.length < 10) {
+                setError('Phone number should be 10 digits');
+                return;
+            }
+            if (numericValue.startsWith("07") && numericValue.length === 10) {
+                setPhoneNumber(numericValue);
+                setError(''); // Clear error if valid
+                navigation.navigate('AppointmentVoiceTextScreen', {
+                    district,
+                    phone: phoneNumber
+                });
+            }
+
         } else {
             console.log("Please select a district and enter a phone number");
+            Alert.alert("Warning", "Please select a district and enter a phone number");
         }
     };
-
+    
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -53,7 +76,6 @@ const AppointmentScreen = () => {
                     <Text style={styles.formTitle}>Fill Your Issue</Text>
 
                     <DropdownInput
-                        label="Select District"
                         selectedValue={district}
                         onValueChange={(value) => setDistrict(value)}
                     />
@@ -65,8 +87,10 @@ const AppointmentScreen = () => {
                             value={phoneNumber}
                             onChangeText={setPhoneNumber}
                             keyboardType="phone-pad"
+                            maxLength={10} // Limit to 10 characters
                         />
                     </View>
+                    {error ? <Text style={styles.errorText}>{error}</Text> : null}
                 </View>
 
                 <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
@@ -130,7 +154,6 @@ const styles = StyleSheet.create({
     dropdownContent: {
         backgroundColor: '#fff',
         borderRadius: 5,
-        padding: 5,
     },
     picker: {
         height: 50,
@@ -173,6 +196,10 @@ const styles = StyleSheet.create({
     activeNavText: {
         color: '#006B3E',
     },
+    errorText: {
+        color: 'red',
+        marginTop: 5,
+    }
 });
 
 export default AppointmentScreen;
