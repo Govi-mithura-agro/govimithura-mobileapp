@@ -52,11 +52,11 @@ const AppointmentFileUploadScreen = () => {
       </View>
       
       <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItem}>
+        <TouchableOpacity style={styles.navItem} onPress={() => router.push('/HomeScreen')}>
           <Icon name="home" size={24} color="#888" />
           <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
+        <TouchableOpacity style={styles.navItem} onPress={() => router.push('/AppointmentHistory')}>
           <Icon name="format-list-bulleted" size={24} color="#888" />
           <Text style={[styles.navText]}>Appointment</Text>
         </TouchableOpacity>

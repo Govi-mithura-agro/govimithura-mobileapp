@@ -1,8 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { API_URL } from '@env';
+import axios from "axios";
+import { useRouter } from 'expo-router';
+
 
 const AppointmentHistory = () => {
+    const router = useRouter();
+    const [appointment, setAppointment] = useState([]);
+
+useEffect(() => {
+    async function fetchAppointments() {
+      try {
+        const response = await axios.post(
+          `${API_URL}:5000/api/appoinments/getappointments`
+        );
+          setAppointment(response.data.appointments);
+      } catch (error) {
+        console.log(error);
+      }
+
+    }
+    fetchAppointments();
+  }, []);
+    
     const appointments = [
         { date: '2024/09/13', id: 1 },
         { date: '2024/09/13', id: 2 },
@@ -44,7 +66,7 @@ const AppointmentHistory = () => {
             </ScrollView>
 
             <View style={styles.bottomNav}>
-                <TouchableOpacity style={styles.navItem}>
+                <TouchableOpacity style={styles.navItem} onPress={() => router.push('/HomeScreen')}>
                     <Icon name="home" size={24} color="#888" />
                     <Text style={styles.navText}>Home</Text>
                 </TouchableOpacity>

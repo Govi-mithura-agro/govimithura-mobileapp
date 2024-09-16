@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView, StyleSheet, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 
 const AppointmentScreen = () => {
     const navigation = useNavigation();
-    const route = useRoute();
+    const router = useRouter();
     const { district, phone } = route.params;
     const [message, setMessage] = useState('');
 
@@ -42,11 +43,11 @@ const AppointmentScreen = () => {
 
             <View style={styles.bottomNav}>
                 <TouchableOpacity style={styles.navItem}>
-                    <Icon name="home" size={24} color="#888" />
+                    <Icon name="home" size={24} color="#888" onPress={() => router.push('/HomeScreen')}/>
                     <Text style={styles.navText}>Home</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem}>
-                    <Icon name="format-list-bulleted" size={24} color="#888" />
+                    <Icon name="format-list-bulleted" size={24} color="#888" onPress={() => router.push('/AppointmentHistory')}/>
                     <Text style={[styles.navText]}>Appointment</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem}>

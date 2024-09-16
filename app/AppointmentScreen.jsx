@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Scro
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 
 const districts = [
     'Ampara', 'Anuradhapura', 'Badulla', 'Batticaloa', 'Colombo',
@@ -31,6 +32,7 @@ const DropdownInput = ({ label, selectedValue, onValueChange }) => (
 );
 
 const AppointmentScreen = () => {
+    const router = useRouter();
     const navigation = useNavigation();
     const [phoneNumber, setPhoneNumber] = useState('');
     const [district, setDistrict] = useState("");
@@ -98,11 +100,11 @@ const AppointmentScreen = () => {
 
             <View style={styles.bottomNav}>
                 <TouchableOpacity style={styles.navItem}>
-                    <Icon name="home" size={24} color="#888" />
+                    <Icon name="home" size={24} color="#888" onPress={() => router.push('/HomeScreen')}/>
                     <Text style={styles.navText}>Home</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem}>
-                    <Icon name="format-list-bulleted" size={24} color="#888" />
+                    <Icon name="format-list-bulleted" size={24} color="#888" onPress={() => router.push('/AppointmentHistory')}/>
                     <Text style={styles.navText}>Appointment</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem}>
