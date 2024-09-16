@@ -5,8 +5,9 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 
 const AppointmentScreen = () => {
-    const navigation = useNavigation();
     const router = useRouter();
+    const navigation = useNavigation();
+    const route = useRoute();
     const { district, phone } = route.params;
     const [message, setMessage] = useState('');
 

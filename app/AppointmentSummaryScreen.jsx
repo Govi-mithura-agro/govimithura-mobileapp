@@ -8,8 +8,9 @@ import { API_URL } from '@env';
 import { useRouter } from 'expo-router';
 
 const AppointmentSummaryScreen = () => {
-    const navigation = useNavigation();
     const router = useRouter();
+    const navigation = useNavigation();
+    const route = useRoute();
     const { district, phone, message } = route.params;
     const [name, setName] = useState('Abhishek Peiris');
     const [email, setEmail] = useState('abhisheklpeiris@gmail.com');

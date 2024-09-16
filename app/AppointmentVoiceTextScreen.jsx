@@ -2,8 +2,10 @@ import React from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 
 const AppointmentVoiceTextScreen = () => {
+    const router = useRouter();
     const navigation = useNavigation();
     const route = useRoute();
     const { district, phone } = route.params;

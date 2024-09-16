@@ -2,9 +2,11 @@ import React from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 
 
 const AppointmentFileUploadScreen = () => {
+  const router = useRouter();
   const navigation = useNavigation();
   const route = useRoute();
   const { district, phone, message } = route.params;
