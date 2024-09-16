@@ -41,6 +41,9 @@ const AppointmentHistory = () => {
     const closeModal = () => {
         setModalVisible(false); // Close modal
     };
+    const CancelAppointment = () => {
+
+    };
 
     return (
         <View style={styles.container}>
@@ -86,7 +89,9 @@ const AppointmentHistory = () => {
                             <Text>Date: {selectedAppointment.date}</Text>
                             <Text>Time: {selectedAppointment.time}</Text>
                             <Text></Text>
-                            <Button title="Close" onPress={closeModal}/>
+                            <Button title="Cancel Appointment" onPress={CancelAppointment} color={'white'} />
+                            <Text></Text>
+                            <Button title="Close" onPress={closeModal} color={'#006B3E'}/>
                         </View>
                     </View>
                 </Modal>
@@ -154,6 +159,9 @@ const styles = StyleSheet.create({
     },
     viewButton: {
         fontSize: 16,
+        color: '#006B3E',
+    },
+    cancelAppointmentButton: {
         color: '#006B3E',
     },
     modalContainer: {
