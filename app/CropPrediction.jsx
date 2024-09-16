@@ -4,6 +4,7 @@ import MapView, { Marker } from 'react-native-maps';
 import axios from 'axios';
 import { Table, Row } from 'react-native-table-component';
 import Modal from 'react-native-modal';
+import { API_URL } from '@env';
 
 const CropPrediction = () => {
     const [locations, setLocations] = useState([]);
@@ -19,7 +20,7 @@ const CropPrediction = () => {
         // Fetch locations from the API
         const fetchLocations = async () => {
             try {
-                const response = await axios.get('http://192.168.8.155:5000/api/locations');
+                const response = await axios.get(`${API_URL}:5000/api/locations`);
                 setLocations(response.data);
             } catch (error) {
                 console.error('Error fetching locations:', error);
@@ -36,7 +37,7 @@ const CropPrediction = () => {
     //Function to fetch crop factors based on district and crops based on province
     const fetchCropFactorsAndCrops = (district, province) => {
         axios
-            .get(`http://192.168.8.155:5000/api/cropfactors/getcropfactors/${district}`)
+            .get(`${API_URL}:5000/api/cropfactors/getcropfactors/${district}`)
             .then((response) => {
                 if (response.data && response.data.cropfactor) {
                     setCropFactor(response.data.cropfactor);
@@ -53,7 +54,7 @@ const CropPrediction = () => {
             });
 
         axios
-            .get(`http://192.168.8.155:5000/api/crops/getcropdata/${province}`)
+            .get(`${API_URL}:5000/api/crops/getcropdata/${province}`)
             .then((response) => {
                 if (response.data && response.data.crop) {
                     setCrops(response.data.crop);
