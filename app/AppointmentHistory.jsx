@@ -44,6 +44,23 @@ const AppointmentHistory = () => {
     const CancelAppointment = () => {
 
     };
+    // Function to get status color
+    const getStatusColor = (status) => {
+        switch (status) {
+            case 'Solved':
+                return '#4CAF50'; // Green
+            case 'Pending':
+                return '#FFC107'; // Amber
+            case 'Unsolved':
+                return '#FF5722'; // Orange
+            case 'Rejected':
+                return '#F44336'; // Red
+            case 'Cancelled':
+                return '#9E9E9E'; // Gray
+            default:
+                return '#000'; // Black for unknown status
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -53,17 +70,22 @@ const AppointmentHistory = () => {
                     <View key={appointment.id} style={styles.appointmentContainer}>
                         <View style={styles.appointmentHeader}>
                             <Text style={styles.appointmentDate}>{appointment.date}</Text>
-                            <TouchableOpacity onPress={() => handleEdit(appointment.id)} style={styles.appointmentEditButton}>
+                            {appointment.status === "Pending" && (
+                                <TouchableOpacity onPress={() => handleEdit(appointment.id)} style={styles.appointmentEditButton}>
                                 <Icon name="square-edit-outline" size={24} color="#000" />
                             </TouchableOpacity>
+                            )}
                             <TouchableOpacity onPress={() => handleDelete(appointment.id)}>
                                 <Icon name="close-circle-outline" size={24} color="#000" />
                             </TouchableOpacity>
                         </View>
+                        <Text style={styles.appointmentTime}>{appointment.time}</Text>
                         <TouchableOpacity onPress={() => handleViewAppointment(appointment)}>
-                            <Text style={styles.appointmentTime}>{appointment.time}</Text>
                             <Text style={styles.viewButton}>View Appointment</Text>
                         </TouchableOpacity>
+                        <Text style={[styles.status, { color: getStatusColor(appointment.status) }]}>
+                            {appointment.status}
+                        </Text>
                     </View>
                 ))}
             </ScrollView>
@@ -88,8 +110,13 @@ const AppointmentHistory = () => {
                             <Text>Uploaded: {selectedAppointment.file}</Text>
                             <Text>Date: {selectedAppointment.date}</Text>
                             <Text>Time: {selectedAppointment.time}</Text>
+                            <Text style={[styles.status, { color: getStatusColor(selectedAppointment.status) }]}>
+                                {selectedAppointment.status}
+                            </Text>
                             <Text></Text>
-                            <Button title="Cancel Appointment" onPress={CancelAppointment} color={'white'} />
+                            {selectedAppointment.status === "Pending" && (
+                                <Button title="Cancel Appointment" onPress={CancelAppointment} color={'white'} />
+                            )}                   
                             <Text></Text>
                             <Button title="Close" onPress={closeModal} color={'#006B3E'}/>
                         </View>
