@@ -8,21 +8,26 @@ const AppointmentVoiceTextScreen = () => {
     const router = useRouter();
     const navigation = useNavigation();
     const route = useRoute();
-    const { district, phone } = route.params;
+    const { id, district, contact, textmessage } = route.params;
 
     const handleContinueTextMessage = () => {
-        if (district && phone) {
-            navigation.navigate('MessageScreen', {
+        if (id && district && contact && textmessage) {
+            navigation.navigate('MessageScreenForUpdate', {
+                id,
                 district,
-                phone
+                contact,
+                textmessage
             });
         } else {
-            console.log("Please select a district and enter a phone number");
+            Alert.alert(
+                "Error",
+                "Something went wrong"
+            );
         }
     };
 
     const handleContinueVoicMessage = () => {
-        
+
     };
 
 
@@ -52,11 +57,11 @@ const AppointmentVoiceTextScreen = () => {
             {/* Bottom Navigation */}
             <View style={styles.bottomNav}>
                 <TouchableOpacity style={styles.navItem}>
-                    <Icon name="home" size={24} color="#888" onPress={() => router.push('/HomeScreen')}/>
+                    <Icon name="home" size={24} color="#888" onPress={() => router.push('/HomeScreen')} />
                     <Text style={styles.navText}>Home</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem}>
-                    <Icon name="format-list-bulleted" size={24} color="#888" onPress={() => router.push('/AppointmentHistory')}/>
+                    <Icon name="format-list-bulleted" size={24} color="#888" onPress={() => router.push('/AppointmentHistory')} />
                     <Text style={[styles.navText]}>Appointment</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem}>

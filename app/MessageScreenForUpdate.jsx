@@ -8,19 +8,22 @@ const AppointmentScreen = () => {
     const router = useRouter();
     const navigation = useNavigation();
     const route = useRoute();
-    const { district, phone } = route.params;
-    const [message, setMessage] = useState('');
+    const { id, district, contact, textmessage } = route.params;
+    const [message, setMessage] = useState(textmessage);
 
-    const handleContinue = () => {
-        if (district && phone && message) {
-            navigation.navigate('AppointmentFileUploadScreen', {
+    const handleContinue = (message) => {
+        if (id && district && contact && message) {
+            navigation.navigate('AppointmentFileUploadScreenForUpdate', {
+                id,
                 district,
-                phone,
-                message
+                contact,
+                textmessage: message
             });
         } else {
-            console.log("Please select a district and enter a phone number and enter a message");
-            Alert.alert("Warning", "Please enter message for your problem");
+            Alert.alert(
+                "Error",
+                "Something went wrong"
+            );
         }
     };
 
@@ -37,18 +40,21 @@ const AppointmentScreen = () => {
                     />
                 </View>
 
-                <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
+                <TouchableOpacity
+                    style={styles.continueButton}
+                    onPress={() => handleContinue(message)}
+                >
                     <Text style={styles.continueButtonText}>Continue</Text>
                 </TouchableOpacity>
             </View>
 
             <View style={styles.bottomNav}>
                 <TouchableOpacity style={styles.navItem}>
-                    <Icon name="home" size={24} color="#888" onPress={() => router.push('/HomeScreen')}/>
+                    <Icon name="home" size={24} color="#888" onPress={() => router.push('/HomeScreen')} />
                     <Text style={styles.navText}>Home</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem}>
-                    <Icon name="format-list-bulleted" size={24} color="#888" onPress={() => router.push('/AppointmentHistory')}/>
+                    <Icon name="format-list-bulleted" size={24} color="#888" onPress={() => router.push('/AppointmentHistory')} />
                     <Text style={[styles.navText]}>Appointment</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem}>

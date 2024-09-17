@@ -11,16 +11,16 @@ const AppointmentSummaryScreen = () => {
     const router = useRouter();
     const navigation = useNavigation();
     const route = useRoute();
-    const { district, phone, message } = route.params;
+    const { id, district, contact, textmessage } = route.params;
     const [name, setName] = useState('Abhishek Peiris');
     const [email, setEmail] = useState('abhisheklpeiris@gmail.com');
 
     const summaryData = {
         Name: name,
         Email: email,
-        Contact: phone,
+        Contact: contact,
         District: district,
-        Message: message
+        Message: textmessage
     };
 
     const attachments = [
@@ -28,20 +28,21 @@ const AppointmentSummaryScreen = () => {
         // { name: '87x28ag7064u4.png', size: '39 KB' },
     ];
 
-    async function addAppointment() {
+    async function updateAppointment(id) {
+
         try {
-            const response = await axios.post(`${API_URL}:5000/api/appoinments/addappointment`, { // Replace localhost with your IP
+            const response = await axios.put(`${API_URL}:5000/api/appoinments/editappointment/${id}`, { 
                 name: name,
                 email: email,
-                contact: phone,
+                contact: contact,
                 district: district,
-                textmessage: message
+                textmessage: textmessage
             });
 
             if (response.status === 200) {
                 Alert.alert(
                     "Success",
-                    "Appointment added successfully",
+                    "Appointment updated successfully",
                     [
                         {
                             text: "OK",
@@ -49,11 +50,11 @@ const AppointmentSummaryScreen = () => {
                         }
                     ]
                 );
-                
+
             }
         } catch (error) {
-            console.error("Error adding appointment:", error);
-            Alert.alert("Error", "Failed to add appointment. Please try again.");
+            console.error("Error updating appointment:", error);
+            Alert.alert("Error", "Failed to update appointment. Please try again.");
         }
     }
 
@@ -84,18 +85,18 @@ const AppointmentSummaryScreen = () => {
                     {attachments.map(renderAttachment)}
                 </View>
 
-                <TouchableOpacity style={styles.submitButton} onPress={addAppointment}>
+                <TouchableOpacity style={styles.submitButton} onPress={() => updateAppointment(id)}>
                     <Text style={styles.submitButtonText}>Submit</Text>
                 </TouchableOpacity>
             </ScrollView>
 
             <View style={styles.bottomNav}>
                 <TouchableOpacity style={styles.navItem}>
-                    <Icon name="home" size={24} color="#888" onPress={() => router.push('/HomeScreen')}/>
+                    <Icon name="home" size={24} color="#888" onPress={() => router.push('/HomeScreen')} />
                     <Text style={styles.navText}>Home</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem}>
-                    <Icon name="format-list-bulleted" size={24} color="#888" onPress={() => router.push('/AppointmentHistory')}/>
+                    <Icon name="format-list-bulleted" size={24} color="#888" onPress={() => router.push('/AppointmentHistory')} />
                     <Text style={[styles.navText]}>Appointment</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem}>

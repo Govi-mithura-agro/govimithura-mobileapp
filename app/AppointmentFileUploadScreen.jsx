@@ -2,9 +2,11 @@ import React from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 
 
 const AppointmentFileUploadScreen = () => {
+  const router = useRouter();
   const navigation = useNavigation();
   const route = useRoute();
   const { district, phone, message } = route.params;
@@ -52,11 +54,11 @@ const AppointmentFileUploadScreen = () => {
       </View>
       
       <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItem}>
+        <TouchableOpacity style={styles.navItem} onPress={() => router.push('/HomeScreen')}>
           <Icon name="home" size={24} color="#888" />
           <Text style={styles.navText}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
+        <TouchableOpacity style={styles.navItem} onPress={() => router.push('/AppointmentHistory')}>
           <Icon name="format-list-bulleted" size={24} color="#888" />
           <Text style={[styles.navText]}>Appointment</Text>
         </TouchableOpacity>
