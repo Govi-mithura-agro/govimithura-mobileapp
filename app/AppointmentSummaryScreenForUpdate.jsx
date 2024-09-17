@@ -28,9 +28,10 @@ const AppointmentSummaryScreen = () => {
         // { name: '87x28ag7064u4.png', size: '39 KB' },
     ];
 
-    async function addAppointment() {
+    async function updateAppointment(id) {
+
         try {
-            const response = await axios.post(`${API_URL}:5000/api/appoinments/addappointment`, { // Replace localhost with your IP
+            const response = await axios.put(`${API_URL}:5000/api/appoinments/editappointment/${id}`, { 
                 name: name,
                 email: email,
                 contact: contact,
@@ -41,7 +42,7 @@ const AppointmentSummaryScreen = () => {
             if (response.status === 200) {
                 Alert.alert(
                     "Success",
-                    "Appointment added successfully",
+                    "Appointment updated successfully",
                     [
                         {
                             text: "OK",
@@ -52,8 +53,8 @@ const AppointmentSummaryScreen = () => {
 
             }
         } catch (error) {
-            console.error("Error adding appointment:", error);
-            Alert.alert("Error", "Failed to add appointment. Please try again.");
+            console.error("Error updating appointment:", error);
+            Alert.alert("Error", "Failed to update appointment. Please try again.");
         }
     }
 
@@ -84,7 +85,7 @@ const AppointmentSummaryScreen = () => {
                     {attachments.map(renderAttachment)}
                 </View>
 
-                <TouchableOpacity style={styles.submitButton} onPress={addAppointment}>
+                <TouchableOpacity style={styles.submitButton} onPress={() => updateAppointment(id)}>
                     <Text style={styles.submitButtonText}>Submit</Text>
                 </TouchableOpacity>
             </ScrollView>

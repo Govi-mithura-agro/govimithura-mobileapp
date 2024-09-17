@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
     View,
     Text,
@@ -13,7 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { API_URL } from "@env";
 import axios from "axios";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 
 const AppointmentHistory = () => {
     const router = useRouter();
@@ -22,19 +22,21 @@ const AppointmentHistory = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedAppointment, setSelectedAppointment] = useState(null);
 
-    useEffect(() => {
-        async function fetchAppointments() {
-            try {
-                const response = await axios.post(
-                    `${API_URL}:5000/api/appoinments/getappointments`
-                );
-                setAppointment(response.data.appointments);
-            } catch (error) {
-                console.log(error);
+    useFocusEffect(
+        useCallback(() => {
+            async function fetchAppointments() {
+                try {
+                    const response = await axios.post(
+                        `${API_URL}:5000/api/appoinments/getappointments`
+                    );
+                    setAppointment(response.data.appointments);
+                } catch (error) {
+                    console.log(error);
+                }
             }
-        }
-        fetchAppointments();
-    }, []);
+            fetchAppointments();
+        }, [])
+    );
 
     const handleViewAppointment = (appointment) => {
         setSelectedAppointment(appointment); // Set selected appointment
