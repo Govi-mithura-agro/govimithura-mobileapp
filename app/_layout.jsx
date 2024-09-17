@@ -146,6 +146,56 @@ export default function App() {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="AppointmentScreenForUpdate"
+        options={{
+          headerShown: true,
+          headerTitle: "Update Appointment",
+          headerShadowVisible: false,
+          headerTintColor: "white",
+          headerStyle: { backgroundColor: "#379137" },
+        }}
+      />
+      <Stack.Screen
+        name="AppointmentVoiceTextScreenForUpdate"
+        options={{
+          headerShown: true,
+          headerTitle: "Update Appointment",
+          headerShadowVisible: false,
+          headerTintColor: "white",
+          headerStyle: { backgroundColor: "#379137" },
+        }}
+      />
+      <Stack.Screen
+        name="MessageScreenForUpdate"
+        options={{
+          headerShown: true,
+          headerTitle: "Update Appointment",
+          headerShadowVisible: false,
+          headerTintColor: "white",
+          headerStyle: { backgroundColor: "#379137" },
+        }}
+      />
+      <Stack.Screen
+        name="AppointmentFileUploadScreenForUpdate"
+        options={{
+          headerShown: true,
+          headerTitle: "Update Appointment",
+          headerShadowVisible: false,
+          headerTintColor: "white",
+          headerStyle: { backgroundColor: "#379137" },
+        }}
+      />
+      <Stack.Screen
+        name="AppointmentSummaryScreenForUpdate"
+        options={{
+          headerShown: true,
+          headerTitle: "Update Appointment",
+          headerShadowVisible: false,
+          headerTintColor: "white",
+          headerStyle: { backgroundColor: "#379137" },
+        }}
+      />
     </Stack>
     
   );

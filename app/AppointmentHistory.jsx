@@ -9,6 +9,7 @@ import {
     Button,
     Alert,
 } from "react-native";
+import { useNavigation } from '@react-navigation/native';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { API_URL } from "@env";
 import axios from "axios";
@@ -16,6 +17,7 @@ import { useRouter } from "expo-router";
 
 const AppointmentHistory = () => {
     const router = useRouter();
+    const navigation = useNavigation();
     const [appointment, setAppointment] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedAppointment, setSelectedAppointment] = useState(null);
@@ -33,14 +35,6 @@ const AppointmentHistory = () => {
         }
         fetchAppointments();
     }, []);
-
-    const handleEdit = (id) => {
-        console.log("Edit appointment with id:", id);
-    };
-
-    const handleDelete = (id) => {
-        console.log("Delete appointment with id:", id);
-    };
 
     const handleViewAppointment = (appointment) => {
         setSelectedAppointment(appointment); // Set selected appointment
@@ -102,6 +96,22 @@ const AppointmentHistory = () => {
         }
     };
 
+    const handleContinue = (id, district, contact, textmessage) => {
+        if (id && district && contact && textmessage) {
+            navigation.navigate('AppointmentScreenForUpdate', {
+                id,
+                district,
+                contact,
+                textmessage
+            });
+        } else {
+            Alert.alert(
+                "Error",
+                "Something went wrong"
+            );
+        }
+    };
+
     return (
         <View style={styles.container}>
             <Text style={styles.header}>My Appointments</Text>
@@ -112,13 +122,18 @@ const AppointmentHistory = () => {
                             <Text style={styles.appointmentDate}>{appointment.date}</Text>
                             {appointment.status === "Pending" && (
                                 <TouchableOpacity
-                                    onPress={() => handleEdit(appointment.id)}
+                                    onPress={() => handleContinue(
+                                        appointment._id,
+                                        appointment.district,
+                                        appointment.contact,
+                                        appointment.textmessage
+                                    )}
                                     style={styles.appointmentEditButton}
                                 >
                                     <Icon name="square-edit-outline" size={24} color="#000" />
                                 </TouchableOpacity>
                             )}
-                            <TouchableOpacity onPress={() => handleDelete(appointment.id)}>
+                            <TouchableOpacity>
                                 <Icon name="close-circle-outline" size={24} color="#000" />
                             </TouchableOpacity>
                         </View>
@@ -253,7 +268,7 @@ const styles = StyleSheet.create({
     },
     cancelAppointmentButton: {
         color: "white",
-        marginTop: 20
+        marginTop: 20,
     },
     modalContainer: {
         flex: 1,
