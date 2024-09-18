@@ -177,6 +177,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 15,
     marginBottom: 20,
+
   },
   dropdownInput: {
     marginBottom: 15,
@@ -203,15 +204,28 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   continueButton: {
-    backgroundColor: "#379137",
-    padding: 15,
-    borderRadius: 5,
-    alignItems: "center",
+    backgroundColor: '#379137',  // Green button background
+    paddingVertical: 15,
+    paddingHorizontal: 40,
+    borderRadius: 10,
+    marginVertical: 10,
+    height: 50,
+    width: '100%',
+    alignItems: 'center',
+
+    // Shadow properties for iOS/web
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    // Shadow for Android (elevation)
+    elevation: 5,
   },
   continueButtonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 18,
+    color: '#FFF',
+    fontFamily: 'Poppins-SemiBold',
   },
   bottomNav: {
     flexDirection: "row",
@@ -227,13 +241,16 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 5,
     color: "#888",
+    fontFamily: 'Poppins-Regular'
   },
   activeNavText: {
     color: "#006B3E",
+    fontFamily: 'Poppins-Regular'
   },
   errorText: {
     color: "red",
     marginTop: 5,
+    fontFamily: 'Poppins-Regular'
   },
 });
 

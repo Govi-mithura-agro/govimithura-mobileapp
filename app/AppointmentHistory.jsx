@@ -167,15 +167,15 @@ const AppointmentHistory = () => {
                     <View style={styles.modalContainer}>
                         <View style={styles.modalContent}>
                             <Text style={styles.modalTitle}>Appointment Details</Text>
-                            <Text>Name: {selectedAppointment.name}</Text>
-                            <Text>Email: {selectedAppointment.email}</Text>
-                            <Text>Contact: {selectedAppointment.contact}</Text>
-                            <Text>District: {selectedAppointment.district}</Text>
-                            <Text>Voice message: {selectedAppointment.voicemessage}</Text>
-                            <Text>Text message: {selectedAppointment.textmessage}</Text>
-                            <Text>Uploaded: {selectedAppointment.file}</Text>
-                            <Text>Date: {selectedAppointment.date}</Text>
-                            <Text>Time: {selectedAppointment.time}</Text>
+                            <Text style={styles.statusnormal}>Name: <Text style={styles.status}>{selectedAppointment.name}</Text></Text>
+                            <Text style={styles.statusnormal}>Email: <Text style={styles.status}>{selectedAppointment.email}</Text></Text>
+                            <Text style={styles.statusnormal}>Contact: <Text style={styles.status}>{selectedAppointment.contact}</Text></Text>
+                            <Text style={styles.statusnormal}>District: <Text style={styles.status}>{selectedAppointment.district}</Text></Text>
+                            <Text style={styles.statusnormal}>Voice message: <Text style={styles.status}>{selectedAppointment.voicemessage}</Text></Text>
+                            <Text style={styles.statusnormal}>Text message: <Text style={styles.status}>{selectedAppointment.textmessage}</Text></Text>
+                            <Text style={styles.statusnormal}>Uploaded: <Text style={styles.status}>{selectedAppointment.file}</Text></Text>
+                            <Text style={styles.statusnormal}>Date: <Text style={styles.status}>{selectedAppointment.date}</Text></Text>
+                            <Text style={styles.statusnormal}>Time: <Text style={styles.status}>{selectedAppointment.time}</Text></Text>
                             <Text
                                 style={[
                                     styles.status,
@@ -255,11 +255,12 @@ const styles = StyleSheet.create({
     },
     appointmentDate: {
         fontSize: 20,
-        fontWeight: "bold",
+        fontFamily: 'Poppins-SemiBold',
     },
     appointmentTime: {
         fontSize: 12,
         marginBottom: 10,
+        fontFamily: 'Poppins-Regular'
     },
     appointmentEditButton: {
         marginLeft: -80,
@@ -267,6 +268,7 @@ const styles = StyleSheet.create({
     viewButton: {
         fontSize: 16,
         color: "#006B3E",
+        fontFamily: 'Poppins-Regular'
     },
     cancelAppointmentButton: {
         color: "white",
@@ -284,11 +286,13 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         borderRadius: 10,
         alignItems: "left",
+        fontFamily: 'Poppins-SemiBold'
     },
     modalTitle: {
         fontSize: 18,
-        fontWeight: "bold",
+        fontFamily: 'Poppins-SemiBold',
         marginBottom: 10,
+        color: "#006B3E",
     },
     bottomNav: {
         flexDirection: "row",
@@ -304,15 +308,22 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginTop: 5,
         color: "#888",
+        fontFamily: 'Poppins-Regular'
     },
     activeNavText: {
         color: "#006B3E",
+        fontFamily: 'Poppins-Regular'
     },
     status: {
         fontSize: 14,
         marginTop: 5,
-        fontWeight: "bold",
+        fontFamily: 'Poppins-SemiBold'
     },
+    statusnormal: {
+        fontSize: 14,
+        marginTop: 5,
+        fontFamily: 'Poppins-Regular'
+    }
 });
 
 export default AppointmentHistory;

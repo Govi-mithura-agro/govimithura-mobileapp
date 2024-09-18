@@ -13,7 +13,7 @@ const ForgotPasswordScreen = () => {
                     The verification code will be sent to this email address
                 </Text>
                 <View style={styles.inputContainer}>
-                    <Text style={styles.inputLabel}>email</Text>
+                    <Text style={styles.inputLabel}>Email</Text>
                     <TextInput
                         style={styles.input}
                         value={email}
@@ -33,7 +33,7 @@ const ForgotPasswordScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F1F1F1',
+        backgroundColor: '#FFF',
     },
     content: {
         flex: 1,
@@ -41,38 +41,61 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 24,
-        fontWeight: 'bold',
         marginBottom: 8,
+        fontFamily: 'Poppins-SemiBold',
     },
     description: {
         fontSize: 14,
         color: '#666',
         marginBottom: 20,
+        fontFamily: 'Poppins-Regular',
     },
     inputContainer: {
         backgroundColor: '#FFF',
         borderRadius: 10,
         padding: 10,
         marginBottom: 20,
+        // Shadow properties for iOS/web
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        // Shadow for Android (elevation)
+        elevation: 5,
     },
     inputLabel: {
         fontSize: 12,
         color: '#888',
         marginBottom: 4,
+        fontFamily: 'Poppins-Regular',
     },
     input: {
         fontSize: 16,
     },
     continueButton: {
-        backgroundColor: '#379137',
-        padding: 15,
+        backgroundColor: '#379137',  // Green button background
+        paddingVertical: 15,
+        paddingHorizontal: 40,
         borderRadius: 10,
+        marginVertical: 10,
+        height: 50,
+        width: '100%',
         alignItems: 'center',
+
+        // Shadow properties for iOS/web
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        // Shadow for Android (elevation)
+        elevation: 5,
     },
     continueButtonText: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: 'bold',
+        fontSize: 18,
+        color: '#FFF',
+        fontFamily: 'Poppins-SemiBold',
     },
 });
 
