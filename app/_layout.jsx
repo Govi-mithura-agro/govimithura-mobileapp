@@ -1,5 +1,5 @@
 import { SplashScreen, Stack } from 'expo-router'
-import { useFonts } from 'expo-font'
+import { processFontFamily, useFonts } from 'expo-font'
 import { useEffect } from 'react';
 
 
@@ -98,8 +98,8 @@ export default function App() {
           headerShown: true,
           headerTitle: "Appiontment",
           headerShadowVisible: false,
-          headerTintColor: "white",
-          headerStyle: { backgroundColor: "#379137" },
+          headerTintColor: "black",
+          headerStyle: { backgroundColor: "#FFF" },
         }}
       />
       <Stack.Screen
@@ -108,8 +108,8 @@ export default function App() {
           headerShown: true,
           headerTitle: "Appiontment",
           headerShadowVisible: false,
-          headerTintColor: "white",
-          headerStyle: { backgroundColor: "#379137" },
+          headerTintColor: "black",
+          headerStyle: { backgroundColor: "#FFF" },
         }}
       />
       <Stack.Screen
@@ -128,8 +128,8 @@ export default function App() {
           headerShown: true,
           headerTitle: "Appiontment",
           headerShadowVisible: false,
-          headerTintColor: "white",
-          headerStyle: { backgroundColor: "#379137" },
+          headerTintColor: "black",
+          headerStyle: { backgroundColor: "#FFF" },
         }}
       />
       <Stack.Screen
@@ -138,8 +138,8 @@ export default function App() {
           headerShown: true,
           headerTitle: "Appiontment",
           headerShadowVisible: false,
-          headerTintColor: "white",
-          headerStyle: { backgroundColor: "#379137" },
+          headerTintColor: "black",
+          headerStyle: { backgroundColor: "#FFF" },
         }}
       />
       <Stack.Screen
@@ -148,8 +148,8 @@ export default function App() {
           headerShown: true,
           headerTitle: "Appiontment",
           headerShadowVisible: false,
-          headerTintColor: "white",
-          headerStyle: { backgroundColor: "#379137" },
+          headerTintColor: "black",
+          headerStyle: { backgroundColor: "#FFF" },
         }}
       />
       <Stack.Screen
@@ -158,8 +158,8 @@ export default function App() {
           headerShown: true,
           headerTitle: "Crop Prediction",
           headerShadowVisible: false,
-          headerTintColor: "white",
-          headerStyle: { backgroundColor: "#379137" },
+          headerTintColor: "black",
+          headerStyle: { backgroundColor: "#FFF" },
         }}
       />
       <Stack.Screen

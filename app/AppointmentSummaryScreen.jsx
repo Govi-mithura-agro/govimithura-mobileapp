@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     },
     summaryTitle: {
         fontSize: 18,
-        fontWeight: 'bold',
+        fontFamily: 'Poppins-SemiBold',
         marginBottom: 16,
     },
     summaryItem: {
@@ -142,9 +142,10 @@ const styles = StyleSheet.create({
     },
     summaryLabel: {
         color: '#666',
+        fontFamily: 'Poppins-Regular',
     },
     summaryValue: {
-        fontWeight: 'bold',
+        fontFamily: 'Poppins-SemiBold',
     },
     attachmentItem: {
         flexDirection: 'row',
@@ -162,15 +163,28 @@ const styles = StyleSheet.create({
         fontSize: 12,
     },
     submitButton: {
-        backgroundColor: '#4CAF50',
-        borderRadius: 8,
-        padding: 16,
+        backgroundColor: '#379137',  // Green button background
+        paddingVertical: 15,
+        paddingHorizontal: 40,
+        borderRadius: 10,
+        marginVertical: 10,
+        height: 50,
+        width: '100%',
         alignItems: 'center',
+
+        // Shadow properties for iOS/web
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        // Shadow for Android (elevation)
+        elevation: 5,
     },
     submitButtonText: {
-        color: '#fff',
         fontSize: 18,
-        fontWeight: 'bold',
+        color: '#FFF',
+        fontFamily: 'Poppins-SemiBold',
     },
     bottomNav: {
         flexDirection: 'row',
@@ -186,9 +200,11 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginTop: 5,
         color: '#888',
+        fontFamily: 'Poppins-Regular'
     },
     activeNavText: {
         color: '#006B3E',
+        fontFamily: 'Poppins-Regular'
     },
 });
 
