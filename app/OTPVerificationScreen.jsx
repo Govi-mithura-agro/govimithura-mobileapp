@@ -22,9 +22,9 @@ const OTPVerificationScreen = () => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.content}>
-                <Text style={styles.title}>OTP</Text>
+                <Text style={styles.title}>OTP Verification</Text>
                 <Text style={styles.description}>
-                    Please enter the code sent to dhfhshf1234@gmail.com
+                    Please enter the code sent to <Text style={styles.descriptionnuumber}>+94 77 123 4567</Text>
                 </Text>
                 <View style={styles.otpContainer}>
                     {otp.map((digit, index) => (
@@ -40,7 +40,7 @@ const OTPVerificationScreen = () => {
                     ))}
                 </View>
                 <TouchableOpacity style={styles.continueButton} onPress={() => router.push('/HomeScreen')} >
-                    <Text style={styles.continueButtonText}>Continue</Text>
+                    <Text style={styles.continueButtonText}>Verify</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -58,13 +58,14 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 24,
-        fontWeight: 'bold',
         marginBottom: 8,
+        fontFamily: 'Poppins-SemiBold',
     },
     description: {
         fontSize: 14,
         color: '#666',
         marginBottom: 20,
+        fontFamily: 'Poppins-Regular',
     },
     otpContainer: {
         flexDirection: 'row',
@@ -79,18 +80,37 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         textAlign: 'center',
         fontSize: 18,
+        
     },
     continueButton: {
-        backgroundColor: '#379137',
-        padding: 15,
+        backgroundColor: '#379137',  // Green button background
+        paddingVertical: 15,
+        paddingHorizontal: 40,
         borderRadius: 10,
+        marginVertical: 10,
+        height: 50,
+        width: '100%',
         alignItems: 'center',
+
+        // Shadow properties for iOS/web
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        // Shadow for Android (elevation)
+        elevation: 5,
     },
     continueButtonText: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: 'bold',
+        fontSize: 18,
+        color: '#FFF',
+        fontFamily: 'Poppins-SemiBold',
     },
+    descriptionnuumber:{
+        fontFamily: 'Poppins-SemiBold',
+        color: '#379137',
+        textDecorationLine: 'underline'  // underline the number.
+    }
 });
 
 export default OTPVerificationScreen;

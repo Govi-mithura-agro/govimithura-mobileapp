@@ -1,8 +1,7 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, SafeAreaView, Image, Linking } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useRouter } from 'expo-router';
-import { Link } from "@react-navigation/native";
 
 const CategoryItem = ({ icon, title, route }) => {
     const router = useRouter();
@@ -15,10 +14,19 @@ const CategoryItem = ({ icon, title, route }) => {
         </TouchableOpacity>
     );
 };
-const InfoCard = ({ title, description }) => (
+
+const InfoCard = ({ title, description, videoId }) => (
     <View style={styles.infoCard}>
         <Text style={styles.infoTitle}>{title}</Text>
         <Text style={styles.infoDescription}>{description}</Text>
+        {videoId && (
+            <TouchableOpacity onPress={() => Linking.openURL(`https://www.youtube.com/watch?v=${videoId}`)}>
+                <Image
+                    source={{ uri: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` }}
+                    style={styles.thumbnail}
+                />
+            </TouchableOpacity>
+        )}
     </View>
 );
 
@@ -46,13 +54,31 @@ const HomeScreen = () => {
                 </View>
 
                 <InfoCard
-                    title="How to bla bla bla bla bla ?"
-                    description="How do you choose suitable crops for your area"
+                    title="How to Use Drone Technology for Agriculture?"
+                    description="20 acres per hour is the latest way of applying fertilizers and medicines in Sri Lanka."
+                    videoId="O-ELyhSNct4" // Replace with the YouTube video ID
                 />
                 <InfoCard
-                    title="How to bla bla bla bla bla ?"
-                    description="How do you choose suitable crops for your area"
+                    title="How to Use Drone Technology for Agriculture?"
+                    description="Five minutes to the acre! - Fertilizer spraying sky inside the tunnel."
+                    videoId="TpPxwWdOqmM" // Replace with the YouTube video ID
                 />
+                <InfoCard
+                    title="Greenhouse Technology & Modernized Agriculture Training"
+                    description="Let's learn greenhouse technology correctly!"
+                    videoId="fkbTl1AoRSs" // Replace with the YouTube video ID
+                />
+                <InfoCard
+                    title="Speech of Mr. Rohana Gamage, Project Director of World Bank Agriculture Sector Modernization Project"
+                    description="The World Bank's Agriculture Sector Modernization Project is a project that will benefit the entire country."
+                    videoId="fGKjXHYVtzc" // Replace with the YouTube video ID
+                />
+                <InfoCard
+                    title="Let's know exactly before building a greenhouse"
+                    description="Before making your own Polytunnel Greenhouse."
+                    videoId="0wT-0LECQks" // Replace with the YouTube video ID
+                />
+
             </ScrollView>
 
             <View style={styles.bottomNav}>
@@ -95,14 +121,15 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#888',
         marginTop: 10,
+        fontFamily: 'Poppins-Regular',
     },
     userName: {
         fontSize: 20,
-        fontWeight: 'bold',
+        fontFamily: 'Poppins-SemiBold',
     },
     sectionTitle: {
         fontSize: 18,
-        fontWeight: 'bold',
+        fontFamily: 'Poppins-SemiBold',
         marginBottom: 10,
     },
     categoryContainer: {
@@ -123,8 +150,9 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     categoryTitle: {
-        fontSize: 12,
+        fontSize: 10,
         textAlign: 'center',
+        fontFamily: 'Poppins-Regular',
     },
     infoCard: {
         backgroundColor: '#F0F0F0',
@@ -133,13 +161,20 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
     infoTitle: {
-        fontSize: 16,
-        fontWeight: 'bold',
+        fontSize: 14,
+        fontFamily: 'Poppins-SemiBold',
         marginBottom: 5,
     },
     infoDescription: {
-        fontSize: 14,
+        fontSize: 12,
         color: '#666',
+        fontFamily: 'Poppins-Regular',
+    },
+    thumbnail: {
+        width: '100%',
+        height: 200,
+        borderRadius: 10,
+        marginTop: 10,
     },
     bottomNav: {
         flexDirection: 'row',
@@ -155,6 +190,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginTop: 5,
         color: '#888',
+        fontFamily: 'Poppins-Regular',
     },
 });
 
