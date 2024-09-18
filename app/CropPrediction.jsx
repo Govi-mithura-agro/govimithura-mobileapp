@@ -182,7 +182,7 @@ const CropPrediction = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#FFF',
     },
     mapContainer: {
         height: 300,
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     },
     header: {
         fontSize: 24,
-        fontWeight: 'bold',
+        fontFamily: 'Poppins-SemiBold',
         marginBottom: 15,
         color: '#333',
     },
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     },
     sectionTitle: {
         fontSize: 18,
-        fontWeight: 'bold',
+        fontFamily: 'Poppins-SemiBold',
         marginBottom: 10,
         color: '#0c883d',
     },
@@ -221,27 +221,31 @@ const styles = StyleSheet.create({
     rowLabel: {
         fontSize: 16,
         color: '#333',
+        fontFamily: 'Poppins-Regular',
     },
     rowValue: {
         fontSize: 16,
         color: '#666',
+        fontFamily: 'Poppins-SemiBold',
     },
     notFoundText: {
         fontSize: 18,
         color: 'red',
         textAlign: 'center',
         marginTop: 20,
+        fontFamily: 'Poppins-Regular',
     },
     tableContainer: {
         marginTop: 20,
     },
     tableHeader: {
         height: 50,
-        backgroundColor: '#f1f8ff',
+        backgroundColor: '#e7ffe7',
+        borderRadius: 10,
     },
     tableHeaderText: {
         textAlign: 'center',
-        fontWeight: 'bold',
+        fontFamily: 'Poppins-SemiBold',
     },
     tableRowEven: {
         backgroundColor: '#f9f9f9',
@@ -249,6 +253,8 @@ const styles = StyleSheet.create({
     tableRowText: {
         textAlign: 'center',
         padding: 5,
+        fontFamily: 'Poppins-Regular',
+        fontSize: 12,
     },
     cropImage: {
         width: 50,
@@ -272,23 +278,38 @@ const styles = StyleSheet.create({
     },
     modalTitle: {
         fontSize: 20,
-        fontWeight: 'bold',
+        fontFamily: 'Poppins-SemiBold',
         marginBottom: 10,
     },
     modalDescription: {
-        fontSize: 16,
-        textAlign: 'center',
+        fontSize: 10,
+        textAlign: 'justify',
         marginBottom: 15,
+        fontFamily: 'Poppins-Regular',
     },
     closeButton: {
-        backgroundColor: '#0c883d',
-        padding: 10,
-        borderRadius: 5,
+        backgroundColor: '#379137',  // Green button background
+        paddingVertical: 15,
+        paddingHorizontal: 40,
+        borderRadius: 10,
+        marginVertical: 10,
+        height: 50,
+        width: '100%',
+        alignItems: 'center',
+
+        // Shadow properties for iOS/web
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        // Shadow for Android (elevation)
+        elevation: 5,
     },
     closeButtonText: {
         color: 'white',
         fontSize: 16,
-        fontWeight: 'bold',
+        fontFamily: 'Poppins-SemiBold',
     },
 });
 
