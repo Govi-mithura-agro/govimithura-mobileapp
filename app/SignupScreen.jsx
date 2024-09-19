@@ -1,37 +1,121 @@
-import Link from "@react-navigation/native/src/Link";
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert } from 'react-native';
+import { Link, useRouter } from 'expo-router';
+import { useNavigation } from "@react-navigation/native";
 
 const SignupScreen = () => {
+    const navigation = useNavigation();
     const router = useRouter();
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [contact, setContact] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState("");
+    const [errorpassword, setErrorPassword] = useState("");
+
+    const handleSignup = async () => {
+        if (password !== confirmPassword) {
+            setErrorPassword('Passwords do not match');
+            return;
+        }
+        setErrorPassword(""); // Clear error if valid
+
+        if (!name || !email || !contact || !password) { 
+            Alert.alert('Warning', 'Please fill in all required fields');
+            return;
+        }
+
+        if (name && email && contact && password) {
+            // Remove any non-numeric characters
+            const numericValue = contact.replace(/[^0-9]/g, "");
+            // Ensure it starts with "07"
+            if (!numericValue.startsWith("7")) {
+                setError('Phone number must start with "7"');
+                return;
+            }
+            if (numericValue.length > 9) {
+                setError("Phone number should be exactly 9 digits");
+                return;
+            }
+            // Update phone number and validate length
+            if (numericValue.length < 9) {
+                setError("Phone number should be 9 digits");
+                return;
+            }
+            if (numericValue.startsWith("7") && numericValue.length === 9) {
+                setContact(numericValue);
+                setError(""); // Clear error if valid
+                navigation.navigate("OTPVerificationScreen", {
+                    name,
+                    email,
+                    contact,
+                    password
+
+                });
+            }
+        } else {
+            Alert.alert(
+                "Warning",
+                "Please fill in all required fields"
+            );
+        }
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.content}>
                 <Text style={styles.subtitle}>Create a new account</Text>
 
-                <TextInput style={styles.input} placeholder="Name" />
-                <TextInput style={styles.input} placeholder="E-mail" />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Name"
+                    value={name}
+                    onChangeText={setName}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="E-mail"
+                    value={email}
+                    onChangeText={setEmail}
+                    keyboardType="email-address"
+                />
                 <View style={styles.phoneInput}>
                     <Text style={styles.phonePrefix}>+94</Text>
-                    <TextInput style={styles.phoneNumber} placeholder="Phone number" keyboardType="phone-pad" maxLength={9} />
+                    <TextInput
+                        style={styles.phoneNumber}
+                        placeholder="Phone number"
+                        keyboardType="phone-pad"
+                        maxLength={9}
+                        value={contact}
+                        onChangeText={setContact}
+                    />
+                    
                 </View>
-                <TextInput style={styles.input} placeholder="Password" secureTextEntry />
-                <TextInput style={styles.input} placeholder="Confirm Password" secureTextEntry />
+                {error ? <Text style={styles.errorText}>{error}</Text> : null}
+                <TextInput
+                    style={styles.input}
+                    placeholder="Password"
+                    secureTextEntry
+                    value={password}
+                    onChangeText={setPassword}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Confirm Password"
+                    secureTextEntry
+                    value={confirmPassword}
+                    onChangeText={setConfirmPassword}
+                />
+                {errorpassword ? <Text style={styles.errorText}>{errorpassword}</Text> : null}
 
-                <View style={styles.checkboxContainer}>
-                    <TouchableOpacity style={styles.checkbox} />
-                    <Text style={styles.checkboxLabel}>Save for later</Text>
-                </View>
-
-                <TouchableOpacity style={styles.signUpButton} onPress={() => router.push('/OTPVerificationScreen')}>
+                <TouchableOpacity style={styles.signUpButton} onPress={handleSignup}>
                     <Text style={styles.signUpButtonText}>SIGN UP</Text>
                 </TouchableOpacity>
 
                 <View style={styles.loginContainer}>
                     <Text style={styles.loginText}>Have an account? </Text>
-                    <Link to='/LoginScreen'>
+                    <Link href='/LoginScreen'>
                         <Text style={styles.loginLink}>Log in</Text>
                     </Link>
                 </View>
@@ -170,6 +254,12 @@ const styles = StyleSheet.create({
         marginTop: 10,
         color: '#888',
         fontFamily: 'Poppins-Regular',
+    },
+    errorText: {
+        color: "red",
+        marginTop: -15,
+        marginBottom: 10,
+        fontFamily: 'Poppins-Regular'
     },
 });
 
