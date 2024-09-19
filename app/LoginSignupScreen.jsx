@@ -9,14 +9,10 @@ const LoginSignupScreen = () => {
     return (
         <View style={styles.container}>
             <Image
-                source={require('../assets/logo.png')}  // Path to your logo image
+                source={require('../assets/login-signup-image.png')}  // Path to your logo image
                 style={styles.logo}
                 resizeMode="contain"
             />
-            <Text style={styles.welcomeText}>Hello !</Text>
-            <Text style={styles.description}>
-                Your app for accurate and efficient measurements in the real world.
-            </Text>
             <TouchableOpacity style={styles.button} onPress={() => router.push('/LoginScreen')} >
                 <Text style={styles.buttonText}>LOGIN</Text>
             </TouchableOpacity>
@@ -35,24 +31,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
     },
     logo: {
-        width: 100,
-        height: 100,
-        marginBottom: 0,
-        marginTop: -50,
-    },
-    welcomeText: {
-        fontSize: 32,
-        fontWeight: 'bold',
-        marginTop: 20,
-        color: '#000000',
-    },
-    description: {
-        fontSize: 16,
-        textAlign: 'center',
-        marginBottom: 200,
-        marginTop: 10,
-        paddingHorizontal: 20,
-        color: '#555555',
+        width: '100%',
+        marginBottom: -100,
+        marginTop: -380,
     },
     button: {
         backgroundColor: '#379137',
@@ -60,7 +41,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 40,
         borderRadius: 10,
         marginVertical: 10,
-        width: '80%',
+        height: 44,
+        width: 300,
     },
     signupButton: {
         backgroundColor: '#1B5E20',

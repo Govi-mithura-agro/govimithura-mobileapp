@@ -1,38 +1,126 @@
-import Link from "@react-navigation/native/src/Link";
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert } from 'react-native';
+import { Link, useRouter } from 'expo-router';
+import { useNavigation } from "@react-navigation/native";
+import axios from 'axios';
+import { API_URL } from "@env";
 
 const SignupScreen = () => {
+    const navigation = useNavigation();
     const router = useRouter();
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [contact, setContact] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [error, setError] = useState("");
+    const [errorpassword, setErrorPassword] = useState("");
+
+    const requestOTP = async () => {
+        try {
+            const response = await axios.post(`${API_URL}:5000/api/appuser/request-otp`, {
+                contact: `+94${contact}`
+            });
+            if (response.status === 200 && response.data.otp) {
+                navigation.navigate("OTPVerificationScreen", {
+                    name,
+                    email,
+                    contact,
+                    password,
+                    otp: response.data.otp // Pass the OTP to the OTPVerificationScreen
+                });
+            } else {
+                Alert.alert('Error', 'Failed to generate OTP');
+            }
+        } catch (error) {
+            Alert.alert('Error', error.response?.data?.message || 'Failed to send OTP');
+        }
+    };
+
+    const handleSignup = async () => {
+        if (password !== confirmPassword) {
+            setErrorPassword('Passwords do not match');
+            return;
+        }
+        setErrorPassword("");
+
+        if (!name || !email || !contact || !password) {
+            Alert.alert('Warning', 'Please fill in all required fields');
+            return;
+        }
+
+        if (name && email && contact && password) {
+            const numericValue = contact.replace(/[^0-9]/g, "");
+            if (!numericValue.startsWith("7")) {
+                setError('Phone number must start with "7"');
+                return;
+            }
+            if (numericValue.length !== 9) {
+                setError("Phone number should be exactly 9 digits");
+                return;
+            }
+            setContact(numericValue);
+            setError("");
+            await requestOTP();
+        } else {
+            Alert.alert("Warning", "Please fill in all required fields");
+        }
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.content}>
-                <Text style={styles.title}>Hi!</Text>
                 <Text style={styles.subtitle}>Create a new account</Text>
 
-                <TextInput style={styles.input} placeholder="Name" />
-                <TextInput style={styles.input} placeholder="E-mail" />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Name"
+                    value={name}
+                    onChangeText={setName}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="E-mail"
+                    value={email}
+                    onChangeText={setEmail}
+                    keyboardType="email-address"
+                />
                 <View style={styles.phoneInput}>
                     <Text style={styles.phonePrefix}>+94</Text>
-                    <TextInput style={styles.phoneNumber} placeholder="Phone number" />
+                    <TextInput
+                        style={styles.phoneNumber}
+                        placeholder="Phone number"
+                        keyboardType="phone-pad"
+                        maxLength={9}
+                        value={contact}
+                        onChangeText={setContact}
+                    />
+                    
                 </View>
-                <TextInput style={styles.input} placeholder="Password" secureTextEntry />
-                <TextInput style={styles.input} placeholder="Confirm Password" secureTextEntry />
+                {error ? <Text style={styles.errorText}>{error}</Text> : null}
+                <TextInput
+                    style={styles.input}
+                    placeholder="Password"
+                    secureTextEntry
+                    value={password}
+                    onChangeText={setPassword}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Confirm Password"
+                    secureTextEntry
+                    value={confirmPassword}
+                    onChangeText={setConfirmPassword}
+                />
+                {errorpassword ? <Text style={styles.errorText}>{errorpassword}</Text> : null}
 
-                <View style={styles.checkboxContainer}>
-                    <TouchableOpacity style={styles.checkbox} />
-                    <Text style={styles.checkboxLabel}>Save for later</Text>
-                </View>
-
-                <TouchableOpacity style={styles.signUpButton} onPress={() => router.push('/OTPVerificationScreen')}>
+                <TouchableOpacity style={styles.signUpButton} onPress={handleSignup}>
                     <Text style={styles.signUpButtonText}>SIGN UP</Text>
                 </TouchableOpacity>
 
                 <View style={styles.loginContainer}>
                     <Text style={styles.loginText}>Have an account? </Text>
-                    <Link to='/LoginScreen'>
+                    <Link href='/LoginScreen'>
                         <Text style={styles.loginLink}>Log in</Text>
                     </Link>
                 </View>
@@ -48,45 +136,66 @@ const SignupScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F1F1F1',
+        backgroundColor: '#FFF',
     },
     content: {
         flex: 1,
         padding: 20,
     },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 8,
-    },
     subtitle: {
-        fontSize: 16,
+        fontSize: 20,
+        color: '#666',
         marginBottom: 20,
+        fontFamily: 'Poppins-SemiBold',
     },
     input: {
-        borderWidth: 1,
-        borderColor: '#ddd',
-        padding: 10,
-        marginBottom: 10,
-        borderRadius: 10,
+        fontFamily: 'Poppins-Regular',
         backgroundColor: '#FFF',
+        padding: 15,
+        borderRadius: 10,
+        fontSize: 16,
+        marginBottom: 20,
+        borderColor: '#DDD',
+        borderWidth: 1,
+
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        // Shadow for Android (elevation)
+        elevation: 5,
     },
     phoneInput: {
         flexDirection: 'row',
         borderWidth: 1,
         borderColor: '#ddd',
-        marginBottom: 10,
-        borderRadius: 10,
         backgroundColor: '#FFF',
+        padding: 5,
+        borderRadius: 10,
+        fontSize: 16,
+        marginBottom: 20,
+        fontFamily: 'Poppins-Regular',
+
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        // Shadow for Android (elevation)
+        elevation: 5,
     },
     phonePrefix: {
-        padding: 10,
+        padding: 15,
         borderRightWidth: 1,
         borderRightColor: '#ddd',
+        fontFamily: 'Poppins-Regular'
     },
     phoneNumber: {
         flex: 1,
         padding: 10,
+        fontFamily: 'Poppins-Regular',
+        fontSize: 16,
     },
     checkboxContainer: {
         flexDirection: 'row',
@@ -103,36 +212,59 @@ const styles = StyleSheet.create({
     },
     checkboxLabel: {
         fontSize: 14,
+        fontFamily: 'Poppins-Regular',
     },
     signUpButton: {
-        backgroundColor: '#379137',
-        padding: 15,
+        backgroundColor: '#379137',  // Green button background
+        paddingVertical: 15,
+        paddingHorizontal: 40,
         borderRadius: 10,
+        marginVertical: 10,
+        height: 50,
+        width: '100%',
         alignItems: 'center',
+
+        // Shadow properties for iOS/web
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        // Shadow for Android (elevation)
+        elevation: 5,
     },
     signUpButtonText: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: 'bold',
+        fontSize: 18,
+        color: '#FFF',
+        fontFamily: 'Poppins-SemiBold'
     },
     loginContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
-        marginTop: 20,
+        marginTop: 10,
     },
     loginText: {
         fontSize: 14,
+        fontFamily: 'Poppins-Regular',
     },
     loginLink: {
         fontSize: 14,
         color: '#379137',
         fontWeight: 'bold',
+        fontFamily: 'Poppins-Regular',
     },
     termsText: {
         fontSize: 12,
         textAlign: 'center',
-        marginTop: 20,
+        marginTop: 10,
         color: '#888',
+        fontFamily: 'Poppins-Regular',
+    },
+    errorText: {
+        color: "red",
+        marginTop: -15,
+        marginBottom: 10,
+        fontFamily: 'Poppins-Regular'
     },
 });
 

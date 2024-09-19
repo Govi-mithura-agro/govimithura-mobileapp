@@ -8,19 +8,22 @@ const AppointmentScreen = () => {
     const router = useRouter();
     const navigation = useNavigation();
     const route = useRoute();
-    const { district, phone } = route.params;
-    const [message, setMessage] = useState('');
+    const { id, district, contact, textmessage } = route.params;
+    const [message, setMessage] = useState(textmessage);
 
-    const handleContinue = () => {
-        if (district && phone && message) {
-            navigation.navigate('AppointmentFileUploadScreen', {
+    const handleContinue = (message) => {
+        if (id && district && contact && message) {
+            navigation.navigate('AppointmentFileUploadScreenForUpdate', {
+                id,
                 district,
-                phone,
-                message
+                contact,
+                textmessage: message
             });
         } else {
-            console.log("Please select a district and enter a phone number and enter a message");
-            Alert.alert("Warning", "Please enter message for your problem");
+            Alert.alert(
+                "Error",
+                "Something went wrong"
+            );
         }
     };
 
@@ -37,18 +40,21 @@ const AppointmentScreen = () => {
                     />
                 </View>
 
-                <TouchableOpacity style={styles.continueButton} onPress={handleContinue}>
+                <TouchableOpacity
+                    style={styles.continueButton}
+                    onPress={() => handleContinue(message)}
+                >
                     <Text style={styles.continueButtonText}>Continue</Text>
                 </TouchableOpacity>
             </View>
 
             <View style={styles.bottomNav}>
                 <TouchableOpacity style={styles.navItem}>
-                    <Icon name="home" size={24} color="#888" onPress={() => router.push('/HomeScreen')}/>
+                    <Icon name="home" size={24} color="#888" onPress={() => router.push('/HomeScreen')} />
                     <Text style={styles.navText}>Home</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem}>
-                    <Icon name="format-list-bulleted" size={24} color="#888" onPress={() => router.push('/AppointmentHistory')}/>
+                    <Icon name="format-list-bulleted" size={24} color="#888" onPress={() => router.push('/AppointmentHistory')} />
                     <Text style={[styles.navText]}>Appointment</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem}>
@@ -85,32 +91,19 @@ const styles = StyleSheet.create({
         marginBottom: 16,
     },
     messageInput: {
-        fontFamily: 'Poppins-Regular',
+
         fontSize: 16,
     },
     continueButton: {
-        backgroundColor: '#379137',  // Green button background
-        paddingVertical: 15,
-        paddingHorizontal: 40,
-        borderRadius: 10,
-        marginVertical: 10,
-        height: 50,
-        width: '100%',
+        backgroundColor: '#379137',
+        borderRadius: 8,
+        padding: 16,
         alignItems: 'center',
-
-        // Shadow properties for iOS/web
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-
-        // Shadow for Android (elevation)
-        elevation: 5,
     },
     continueButtonText: {
+        color: '#fff',
         fontSize: 18,
-        color: '#FFF',
-        fontFamily: 'Poppins-SemiBold',
+        fontWeight: 'bold',
     },
     bottomNav: {
         flexDirection: 'row',
@@ -126,11 +119,9 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginTop: 5,
         color: '#888',
-        fontFamily: 'Poppins-Regular'
     },
     activeNavText: {
         color: '#006B3E',
-        fontFamily: 'Poppins-Regular'
     },
 });
 

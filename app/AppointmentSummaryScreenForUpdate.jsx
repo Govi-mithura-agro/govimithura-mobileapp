@@ -11,16 +11,16 @@ const AppointmentSummaryScreen = () => {
     const router = useRouter();
     const navigation = useNavigation();
     const route = useRoute();
-    const { district, phone, message } = route.params;
+    const { id, district, contact, textmessage } = route.params;
     const [name, setName] = useState('Abhishek Peiris');
     const [email, setEmail] = useState('abhisheklpeiris@gmail.com');
 
     const summaryData = {
         Name: name,
         Email: email,
-        Contact: phone,
+        Contact: contact,
         District: district,
-        Message: message
+        Message: textmessage
     };
 
     const attachments = [
@@ -28,20 +28,21 @@ const AppointmentSummaryScreen = () => {
         // { name: '87x28ag7064u4.png', size: '39 KB' },
     ];
 
-    async function addAppointment() {
+    async function updateAppointment(id) {
+
         try {
-            const response = await axios.post(`${API_URL}:5000/api/appoinments/addappointment`, { // Replace localhost with your IP
+            const response = await axios.put(`${API_URL}:5000/api/appoinments/editappointment/${id}`, { 
                 name: name,
                 email: email,
-                contact: phone,
+                contact: contact,
                 district: district,
-                textmessage: message
+                textmessage: textmessage
             });
 
             if (response.status === 200) {
                 Alert.alert(
                     "Success",
-                    "Appointment added successfully",
+                    "Appointment updated successfully",
                     [
                         {
                             text: "OK",
@@ -49,11 +50,11 @@ const AppointmentSummaryScreen = () => {
                         }
                     ]
                 );
-                
+
             }
         } catch (error) {
-            console.error("Error adding appointment:", error);
-            Alert.alert("Error", "Failed to add appointment. Please try again.");
+            console.error("Error updating appointment:", error);
+            Alert.alert("Error", "Failed to update appointment. Please try again.");
         }
     }
 
@@ -84,18 +85,18 @@ const AppointmentSummaryScreen = () => {
                     {attachments.map(renderAttachment)}
                 </View>
 
-                <TouchableOpacity style={styles.submitButton} onPress={addAppointment}>
+                <TouchableOpacity style={styles.submitButton} onPress={() => updateAppointment(id)}>
                     <Text style={styles.submitButtonText}>Submit</Text>
                 </TouchableOpacity>
             </ScrollView>
 
             <View style={styles.bottomNav}>
                 <TouchableOpacity style={styles.navItem}>
-                    <Icon name="home" size={24} color="#888" onPress={() => router.push('/HomeScreen')}/>
+                    <Icon name="home" size={24} color="#888" onPress={() => router.push('/HomeScreen')} />
                     <Text style={styles.navText}>Home</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem}>
-                    <Icon name="format-list-bulleted" size={24} color="#888" onPress={() => router.push('/AppointmentHistory')}/>
+                    <Icon name="format-list-bulleted" size={24} color="#888" onPress={() => router.push('/AppointmentHistory')} />
                     <Text style={[styles.navText]}>Appointment</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem}>
@@ -132,7 +133,7 @@ const styles = StyleSheet.create({
     },
     summaryTitle: {
         fontSize: 18,
-        fontFamily: 'Poppins-SemiBold',
+        fontWeight: 'bold',
         marginBottom: 16,
     },
     summaryItem: {
@@ -142,10 +143,9 @@ const styles = StyleSheet.create({
     },
     summaryLabel: {
         color: '#666',
-        fontFamily: 'Poppins-Regular',
     },
     summaryValue: {
-        fontFamily: 'Poppins-SemiBold',
+        fontWeight: 'bold',
     },
     attachmentItem: {
         flexDirection: 'row',
@@ -163,28 +163,15 @@ const styles = StyleSheet.create({
         fontSize: 12,
     },
     submitButton: {
-        backgroundColor: '#379137',  // Green button background
-        paddingVertical: 15,
-        paddingHorizontal: 40,
-        borderRadius: 10,
-        marginVertical: 10,
-        height: 50,
-        width: '100%',
+        backgroundColor: '#4CAF50',
+        borderRadius: 8,
+        padding: 16,
         alignItems: 'center',
-
-        // Shadow properties for iOS/web
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-
-        // Shadow for Android (elevation)
-        elevation: 5,
     },
     submitButtonText: {
+        color: '#fff',
         fontSize: 18,
-        color: '#FFF',
-        fontFamily: 'Poppins-SemiBold',
+        fontWeight: 'bold',
     },
     bottomNav: {
         flexDirection: 'row',
@@ -200,11 +187,9 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginTop: 5,
         color: '#888',
-        fontFamily: 'Poppins-Regular'
     },
     activeNavText: {
         color: '#006B3E',
-        fontFamily: 'Poppins-Regular'
     },
 });
 

@@ -16,18 +16,15 @@ const WelcomeScreen = () => {
                 resizeMode="contain"
             />
 
-            {/* Welcome Message */}
-            <Text style={styles.welcomeText}>Welcome !</Text>
-
             {/* Buttons for Language Selection */}
             <TouchableOpacity
-                style={styles.button}
-                onPress={() => router.push('/LoginSignupScreen')}
+                style={styles.buttonEnglish}
+                onPress={() => router.push('/LoginScreen')}
             >
-                <Text style={styles.buttonText}>English</Text>
+                <Text style={styles.buttonTextEnglish}>English</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText}>Sinhala</Text>
+            <TouchableOpacity style={styles.buttonSinhala}>
+                <Text style={styles.buttonTextSinhala}>Sinhala</Text>
             </TouchableOpacity>
         </View>
     );
@@ -45,22 +42,53 @@ const styles = StyleSheet.create({
         height: 200, // Adjust based on your image size
         marginBottom: 30,  // Space between logo and Welcome text
     },
-    welcomeText: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: '#379137',  // Green color for text
-        marginBottom: 20,
-    },
-    button: {
+    buttonEnglish: {
         backgroundColor: '#379137',  // Green button background
-        paddingVertical: 12,
+        paddingVertical: 15,
         paddingHorizontal: 40,
         borderRadius: 10,
         marginVertical: 10,
+        height: 50,
+        width: 300,
+        alignItems: 'center',
+
+        // Shadow properties for iOS/web
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        // Shadow for Android (elevation)
+        elevation: 5,
     },
-    buttonText: {
+    buttonSinhala: {
+        backgroundColor: '#FFFF',  // Green button background
+        paddingVertical: 12,
+        paddingHorizontal: 50,
+        borderRadius: 10,
+        marginVertical: 10,
+        height: 50,
+        width: 300,
+        alignItems: 'center',
+
+        // Shadow properties for iOS/web
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        // Shadow for Android (elevation)
+        elevation: 5,
+    },
+    buttonTextEnglish: {
         fontSize: 18,
         color: '#FFFFFF',  // White text color
+        fontFamily: 'Poppins-SemiBold',  // Update the font family according to your project
+    },
+    buttonTextSinhala: {
+        fontSize: 18,
+        color: '#379137',  // White text color
+        fontFamily: 'Poppins-SemiBold',  // Update the font family according to your project
     }
 });
 

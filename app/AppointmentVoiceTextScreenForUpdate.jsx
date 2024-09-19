@@ -8,21 +8,26 @@ const AppointmentVoiceTextScreen = () => {
     const router = useRouter();
     const navigation = useNavigation();
     const route = useRoute();
-    const { district, phone } = route.params;
+    const { id, district, contact, textmessage } = route.params;
 
     const handleContinueTextMessage = () => {
-        if (district && phone) {
-            navigation.navigate('MessageScreen', {
+        if (id && district && contact && textmessage) {
+            navigation.navigate('MessageScreenForUpdate', {
+                id,
                 district,
-                phone
+                contact,
+                textmessage
             });
         } else {
-            console.log("Please select a district and enter a phone number");
+            Alert.alert(
+                "Error",
+                "Something went wrong"
+            );
         }
     };
 
     const handleContinueVoicMessage = () => {
-        
+
     };
 
 
@@ -52,11 +57,11 @@ const AppointmentVoiceTextScreen = () => {
             {/* Bottom Navigation */}
             <View style={styles.bottomNav}>
                 <TouchableOpacity style={styles.navItem}>
-                    <Icon name="home" size={24} color="#888" onPress={() => router.push('/HomeScreen')}/>
+                    <Icon name="home" size={24} color="#888" onPress={() => router.push('/HomeScreen')} />
                     <Text style={styles.navText}>Home</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem}>
-                    <Icon name="format-list-bulleted" size={24} color="#888" onPress={() => router.push('/AppointmentHistory')}/>
+                    <Icon name="format-list-bulleted" size={24} color="#888" onPress={() => router.push('/AppointmentHistory')} />
                     <Text style={[styles.navText]}>Appointment</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem}>
@@ -104,38 +109,18 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         padding: 15,
         marginBottom: 15,
-        // Shadow properties for iOS/web
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-
-        // Shadow for Android (elevation)
-        elevation: 5,
     },
     button: {
-        backgroundColor: '#379137',  // Green button background
-        paddingVertical: 15,
+        backgroundColor: '#379137',
         paddingHorizontal: 40,
-        borderRadius: 10,
-        marginVertical: 10,
-        height: 50,
-        width: '100%',
-        alignItems: 'center',
-
-        // Shadow properties for iOS/web
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-
-        // Shadow for Android (elevation)
-        elevation: 5,
+        paddingVertical: 10,
+        borderRadius: 5,
+        marginBottom: 35,
     },
     buttonText: {
-        fontSize: 18,
-        color: '#FFF',
-        fontFamily: 'Poppins-SemiBold',
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
     bottomNav: {
         flexDirection: 'row',
@@ -151,11 +136,9 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginTop: 5,
         color: '#888',
-        fontFamily: 'Poppins-Regular'
     },
     activeNavText: {
         color: '#006B3E',
-        fontFamily: 'Poppins-Regular'
     },
 });
 
