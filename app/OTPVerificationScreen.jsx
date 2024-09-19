@@ -1,8 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
 import { useRouter } from 'expo-router';
-import axios from 'axios'; // Make sure to install axios: npm install axios
+import axios from 'axios';
 import { API_URL } from "@env";
 import { useNavigation, useRoute } from '@react-navigation/native';
 
@@ -13,22 +12,35 @@ const OTPVerificationScreen = () => {
     const [otp, setOtp] = useState(['', '', '', '', '', '']);
     const inputRefs = useRef([]);
 
-    const { name, email, contact, password } = route.params;
-
+    const { name, email, contact, password, otp: receivedOTP } = route.params;
 
     const handleOtpChange = (value, index) => {
         const newOtp = [...otp];
         newOtp[index] = value;
         setOtp(newOtp);
 
-        // Move to next input if value is entered
         if (value !== '' && index < 5) {
             inputRefs.current[index + 1].focus();
         }
     };
 
+    const verifyOTP = async () => {
+        const enteredOTP = otp.join('');
+        try {
+            const response = await axios.post(`${API_URL}:5000/api/appuser/verify-otp`, {
+                contact: `+94${contact}`,
+                otp: enteredOTP
+            });
+
+            if (response.status === 200) {
+                // OTP verified successfully, proceed with registration
+                await handleSignup();
+            }
+        } catch (error) {
+            Alert.alert('Error', error.response?.data?.message || 'Invalid OTP');
+        }
+    };
     const handleSignup = async () => {
-        
         try {
             const response = await axios.post(`${API_URL}:5000/api/appuser/register`, {
                 name,
@@ -51,8 +63,10 @@ const OTPVerificationScreen = () => {
             <View style={styles.content}>
                 <Text style={styles.title}>OTP Verification</Text>
                 <Text style={styles.description}>
-                    Please enter the code sent to <Text style={styles.descriptionnuumber}>+94 77 123 4567</Text>
+                    Please enter the code sent to <Text style={styles.descriptionnuumber}>+94 {contact}</Text>
                 </Text>
+                {/* Display the received OTP */}
+                <Text style={styles.otpDisplay}>Received OTP: {receivedOTP}</Text>
                 <View style={styles.otpContainer}>
                     {otp.map((digit, index) => (
                         <TextInput
@@ -66,7 +80,7 @@ const OTPVerificationScreen = () => {
                         />
                     ))}
                 </View>
-                <TouchableOpacity style={styles.continueButton} onPress={() => handleSignup()} >
+                <TouchableOpacity style={styles.continueButton} onPress={verifyOTP}>
                     <Text style={styles.continueButtonText}>Verify</Text>
                 </TouchableOpacity>
             </View>
@@ -137,7 +151,14 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-SemiBold',
         color: '#379137',
         textDecorationLine: 'underline'  // underline the number.
-    }
+    },
+    otpDisplay: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        color: '#379137',
+        textAlign: 'center',
+    },
 });
 
 export default OTPVerificationScreen;

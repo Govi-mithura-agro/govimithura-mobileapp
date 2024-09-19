@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert } from 'react-native';
 import { Link, useRouter } from 'expo-router';
 import { useNavigation } from "@react-navigation/native";
+import axios from 'axios';
+import { API_URL } from "@env";
 
 const SignupScreen = () => {
     const navigation = useNavigation();
@@ -14,51 +16,54 @@ const SignupScreen = () => {
     const [error, setError] = useState("");
     const [errorpassword, setErrorPassword] = useState("");
 
+    const requestOTP = async () => {
+        try {
+            const response = await axios.post(`${API_URL}:5000/api/appuser/request-otp`, {
+                contact: `+94${contact}`
+            });
+            if (response.status === 200 && response.data.otp) {
+                navigation.navigate("OTPVerificationScreen", {
+                    name,
+                    email,
+                    contact,
+                    password,
+                    otp: response.data.otp // Pass the OTP to the OTPVerificationScreen
+                });
+            } else {
+                Alert.alert('Error', 'Failed to generate OTP');
+            }
+        } catch (error) {
+            Alert.alert('Error', error.response?.data?.message || 'Failed to send OTP');
+        }
+    };
+
     const handleSignup = async () => {
         if (password !== confirmPassword) {
             setErrorPassword('Passwords do not match');
             return;
         }
-        setErrorPassword(""); // Clear error if valid
+        setErrorPassword("");
 
-        if (!name || !email || !contact || !password) { 
+        if (!name || !email || !contact || !password) {
             Alert.alert('Warning', 'Please fill in all required fields');
             return;
         }
 
         if (name && email && contact && password) {
-            // Remove any non-numeric characters
             const numericValue = contact.replace(/[^0-9]/g, "");
-            // Ensure it starts with "07"
             if (!numericValue.startsWith("7")) {
                 setError('Phone number must start with "7"');
                 return;
             }
-            if (numericValue.length > 9) {
+            if (numericValue.length !== 9) {
                 setError("Phone number should be exactly 9 digits");
                 return;
             }
-            // Update phone number and validate length
-            if (numericValue.length < 9) {
-                setError("Phone number should be 9 digits");
-                return;
-            }
-            if (numericValue.startsWith("7") && numericValue.length === 9) {
-                setContact(numericValue);
-                setError(""); // Clear error if valid
-                navigation.navigate("OTPVerificationScreen", {
-                    name,
-                    email,
-                    contact,
-                    password
-
-                });
-            }
+            setContact(numericValue);
+            setError("");
+            await requestOTP();
         } else {
-            Alert.alert(
-                "Warning",
-                "Please fill in all required fields"
-            );
+            Alert.alert("Warning", "Please fill in all required fields");
         }
     };
 
