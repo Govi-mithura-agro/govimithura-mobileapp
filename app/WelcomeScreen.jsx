@@ -1,11 +1,31 @@
-import { Link } from "expo-router";
 import React from 'react';
 import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const WelcomeScreen = () => {
-
     const router = useRouter();
+
+    const handleLanguageSelection = async (language) => {
+        // Store the selected language (if needed)
+        // For example:
+        // await AsyncStorage.setItem('selectedLanguage', language);
+
+        try {
+            const userToken = await AsyncStorage.getItem('userDetails');
+            if (userToken) {
+                // User is already logged in, navigate to HomeScreen
+                router.replace('/HomeScreen');
+            } else {
+                // User is not logged in, navigate to LoginScreen
+                router.push('/LoginScreen');
+            }
+        } catch (error) {
+            console.error("Error checking login status:", error);
+            // In case of error, navigate to LoginScreen as a fallback
+            router.push('/LoginScreen');
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -19,11 +39,14 @@ const WelcomeScreen = () => {
             {/* Buttons for Language Selection */}
             <TouchableOpacity
                 style={styles.buttonEnglish}
-                onPress={() => router.push('/LoginScreen')}
+                onPress={() => handleLanguageSelection('English')}
             >
                 <Text style={styles.buttonTextEnglish}>English</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonSinhala}>
+            <TouchableOpacity
+                style={styles.buttonSinhala}
+                onPress={() => handleLanguageSelection('Sinhala')}
+            >
                 <Text style={styles.buttonTextSinhala}>Sinhala</Text>
             </TouchableOpacity>
         </View>
@@ -91,5 +114,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-SemiBold',  // Update the font family according to your project
     }
 });
+
 
 export default WelcomeScreen;

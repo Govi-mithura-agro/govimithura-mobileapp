@@ -159,8 +159,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     categoryIcon: {
-        width: 50,
-        height: 50,
+        width: 65,
+        height: 65,
         borderRadius: 10,
         backgroundColor: '#379137',
         justifyContent: 'center',
