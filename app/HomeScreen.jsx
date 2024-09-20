@@ -113,7 +113,7 @@ const HomeScreen = () => {
                     <Text style={styles.navText}>Notification</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem}>
-                    <Icon name="account" size={24} color="#888" />
+                    <Icon name="account" size={24} color="#888" onPress={() => router.push('/UserProfileScreen')} />
                     <Text style={styles.navText}>Profile</Text>
                 </TouchableOpacity>
             </View>
