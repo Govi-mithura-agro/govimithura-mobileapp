@@ -1,27 +1,53 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
-import { Link, useNavigation } from '@react-navigation/native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { API_URL } from "@env";
 
 const LoginScreen = () => {
-
     const router = useRouter();
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const handleLogin = async () => {
+        if (!email ||!password) {
+            Alert.alert("Login Failed", "Please enter both email and password");
+            return;
+        }
+        try {
+            const response = await axios.post(`${API_URL}:5000/api/appuser/login`, {
+                email,
+                password
+            });
+
+            if (response.data.status === "Login Success") {
+                const userDetails = response.data.loginUser;
+
+                // Store user details in AsyncStorage
+                await AsyncStorage.setItem('userDetails', JSON.stringify(userDetails));
+
+                // Navigate to HomeScreen
+                router.push('/HomeScreen');
+            } else {
+                Alert.alert("Login Failed", "The email or password is incorrect");
+            }
+        } catch (error) {
+            Alert.alert("Login Failed", "The email or password is incorrect");
+        }
+    };
+
     return (
         <View style={styles.container}>
-
-            {/* Header Section */}
             <Image
-                source={require('../assets/logo.png')}  // Update the path according to your project
+                source={require('../assets/logo.png')}
                 style={styles.logo}
                 resizeMode="contain"
             />
             <Text style={styles.subtitle}>Sign in to continue</Text>
 
-            {/* Email Input */}
             <TextInput
                 style={styles.input}
                 placeholder="Email"
@@ -31,7 +57,6 @@ const LoginScreen = () => {
                 keyboardType="email-address"
             />
 
-            {/* Password Input */}
             <TextInput
                 style={styles.input}
                 placeholder="Password"
@@ -40,21 +65,19 @@ const LoginScreen = () => {
                 secureTextEntry
             />
 
-            {/* Forgot Password */}
-            <Link to='/ForgotPasswordScreen' style={styles.forgotPasswordLink}>
+            <TouchableOpacity style={styles.forgotPasswordLink} onPress={() => navigation.navigate('ForgotPasswordScreen')}>
                 <Text style={styles.forgotPassword}>Forgot Password?</Text>
-            </Link>
-            {/* Login Button */}
-            <TouchableOpacity style={styles.loginButton} onPress={() => router.push('/HomeScreen')} >
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
                 <Text style={styles.loginButtonText}>Login</Text>
             </TouchableOpacity>
 
-            {/* Sign Up Section */}
             <View style={styles.signUpContainer}>
-                <Text style={styles.signUpText}>Don’t have an account?</Text>
-                <Link to='/SignupScreen'>
+                <Text style={styles.signUpText}>Don't have an account?</Text>
+                <TouchableOpacity onPress={() => navigation.navigate('SignupScreen')}>
                     <Text style={styles.signUpLink}> Sign Up</Text>
-                </Link>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -93,7 +116,7 @@ const styles = StyleSheet.create({
     forgotPassword: {
         fontSize: 14,
         color: '#379137',
-        marginBottom: 30,
+        marginBottom: 0,
     },
     loginButton: {
         backgroundColor: '#379137',  // Green button background
