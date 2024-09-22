@@ -70,7 +70,7 @@ const UserProfileScreen = () => {
                     </View>
                 </View>
 
-                <TouchableOpacity style={styles.editButton} onPress={() => router.push('/EditProfile')}>
+                <TouchableOpacity style={styles.editButton} onPress={() => router.push('/UpdateUserDetails')}>
                     <Text style={styles.editButtonText}>Edit Profile</Text>
                 </TouchableOpacity>
 

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert, ScrollView } from 'react-native';
 import { Link, useRouter } from 'expo-router';
 import { useNavigation } from "@react-navigation/native";
 import axios from 'axios';
 import { API_URL } from "@env";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignupScreen = () => {
     const navigation = useNavigation();
@@ -17,26 +18,26 @@ const SignupScreen = () => {
     const [errorpassword, setErrorPassword] = useState("");
     const [emailError, setEmailError] = useState("");
 
-    const requestOTP = async () => {
+
+    useEffect(() => {
+        getUserDetails();
+    }, []);
+
+    const getUserDetails = async () => {
         try {
-            const response = await axios.post(`${API_URL}:5000/api/appuser/request-otp`, {
-                contact: `+94${contact}`
-            });
-            if (response.status === 200 && response.data.otp) {
-                navigation.navigate("OTPVerificationScreen", {
-                    name,
-                    email,
-                    contact,
-                    password,
-                    otp: response.data.otp
-                });
-            } else {
-                Alert.alert('Error', 'Failed to generate OTP');
+            const userDetailsString = await AsyncStorage.getItem('userDetails');
+            if (userDetailsString) {
+                setName(JSON.parse(userDetailsString).name);
+                setEmail(JSON.parse(userDetailsString).email);
+                setContact(JSON.parse(userDetailsString).contact);
+                setPassword(JSON.parse(userDetailsString).password);
+                setConfirmPassword(JSON.parse(userDetailsString).password);
             }
         } catch (error) {
-            Alert.alert('Error', error.response?.data?.message || 'Failed to send OTP');
+            console.error("Error fetching user details:", error);
         }
     };
+
 
     const validateEmail = (email) => {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -63,12 +64,12 @@ const SignupScreen = () => {
 
         if (name && email && contact && password) {
             const numericValue = contact.replace(/[^0-9]/g, "");
-            if (!numericValue.startsWith("7")) {
-                setError('Phone number must start with "7"');
+            if (!numericValue.startsWith("07")) {
+                setError('Phone number must start with "07"');
                 return;
             }
-            if (numericValue.length !== 9) {
-                setError("Phone number should be exactly 9 digits");
+            if (numericValue.length !== 10) {
+                setError("Phone number should be exactly 10 digits");
                 return;
             }
             setContact(numericValue);
@@ -83,7 +84,6 @@ const SignupScreen = () => {
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <View style={styles.content}>
-                    <Text style={styles.subtitle}>Create a new account</Text>
 
                     <TextInput
                         style={styles.input}
@@ -103,15 +103,16 @@ const SignupScreen = () => {
                     />
                     {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
                     <View style={styles.phoneInput}>
-                        <Text style={styles.phonePrefix}>+94</Text>
+                       
                         <TextInput
                             style={styles.phoneNumber}
                             placeholder="Phone number"
                             keyboardType="phone-pad"
-                            maxLength={9}
+                            maxLength={10}
                             value={contact}
                             onChangeText={setContact}
                         />
+                        
                     </View>
                     {error ? <Text style={styles.errorText}>{error}</Text> : null}
                     <TextInput
@@ -130,20 +131,9 @@ const SignupScreen = () => {
                     />
                     {errorpassword ? <Text style={styles.errorText}>{errorpassword}</Text> : null}
 
-                    <TouchableOpacity style={styles.signUpButton} onPress={handleSignup}>
-                        <Text style={styles.signUpButtonText}>Sign up</Text>
+                    <TouchableOpacity style={styles.signUpButton}>
+                        <Text style={styles.signUpButtonText}>Submit</Text>
                     </TouchableOpacity>
-
-                    <View style={styles.loginContainer}>
-                        <Text style={styles.loginText}>Have an account? </Text>
-                        <Link href='/LoginScreen'>
-                            <Text style={styles.loginLink}>Log in</Text>
-                        </Link>
-                    </View>
-
-                    <Text style={styles.termsText}>
-                        By clicking "SIGN UP" you agree to our terms of service and Privacy Policy
-                    </Text>
                 </View>
             </ScrollView>
         </SafeAreaView>
