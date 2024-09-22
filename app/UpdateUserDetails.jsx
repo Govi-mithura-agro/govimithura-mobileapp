@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import axios from 'axios';
 import { API_URL } from "@env";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons } from '@expo/vector-icons'; // Import Ionicons for icons
 
 const UpdateUserDetails = () => {
     const navigation = useNavigation();
@@ -17,27 +18,29 @@ const UpdateUserDetails = () => {
     const [error, setError] = useState("");
     const [errorpassword, setErrorPassword] = useState("");
     const [emailError, setEmailError] = useState("");
-
     const [userID, setUserID] = useState(null);
-    
+
+    // States to toggle password visibility
+    const [isPasswordVisible, setPasswordVisibility] = useState(false);
+    const [isConfirmPasswordVisible, setConfirmPasswordVisibility] = useState(false);
 
     useFocusEffect(
         useCallback(() => {
             getUserDetails();
-        }, []) 
+        }, [])
     );
 
     const getUserDetails = async () => {
         try {
             const userDetailsString = await AsyncStorage.getItem('userDetails');
             if (userDetailsString) {
-                setName(JSON.parse(userDetailsString).name);
-                setEmail(JSON.parse(userDetailsString).email);
-                setContact(JSON.parse(userDetailsString).contact);
-                setPassword(JSON.parse(userDetailsString).password);
-                setConfirmPassword(JSON.parse(userDetailsString).password);
-
-                setUserID(JSON.parse(userDetailsString)._id);
+                const userDetails = JSON.parse(userDetailsString);
+                setName(userDetails.name);
+                setEmail(userDetails.email);
+                setContact(userDetails.contact);
+                setPassword(userDetails.password);
+                setConfirmPassword(userDetails.password);
+                setUserID(userDetails._id);
             }
         } catch (error) {
             console.error("Error fetching user details:", error);
@@ -45,7 +48,6 @@ const UpdateUserDetails = () => {
     };
 
     async function updateUser(id) {
-
         if (password !== confirmPassword) {
             setErrorPassword('Passwords do not match');
             return;
@@ -115,18 +117,15 @@ const UpdateUserDetails = () => {
         }
     }
 
-
     const validateEmail = (email) => {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(String(email).toLowerCase());
     };
 
-
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <View style={styles.content}>
-
                     <TextInput
                         style={styles.input}
                         placeholder="Name"
@@ -144,37 +143,56 @@ const UpdateUserDetails = () => {
                         keyboardType="email-address"
                     />
                     {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
-                    <View style={styles.phoneInput}>
-                       
-                        <TextInput
-                            style={styles.phoneNumber}
-                            placeholder="Phone number"
-                            keyboardType="phone-pad"
-                            maxLength={10}
-                            value={contact}
-                            onChangeText={setContact}
-                        />
-                        
-                    </View>
+
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Phone number"
+                        keyboardType="phone-pad"
+                        maxLength={10}
+                        value={contact}
+                        onChangeText={setContact}
+                    />
                     {error ? <Text style={styles.errorText}>{error}</Text> : null}
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Password"
-                        secureTextEntry
-                        value={password}
-                        onChangeText={setPassword}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Confirm Password"
-                        secureTextEntry
-                        value={confirmPassword}
-                        onChangeText={setConfirmPassword}
-                    />
+
+                    {/* Password Input with Toggle */}
+                    <View style={styles.passwordContainer}>
+                        <TextInput
+                            style={styles.passwordInput}
+                            placeholder="Password"
+                            secureTextEntry={!isPasswordVisible} // Toggle visibility
+                            value={password}
+                            onChangeText={setPassword}
+                        />
+                        <TouchableOpacity onPress={() => setPasswordVisibility(!isPasswordVisible)} style={styles.visibilityToggle}>
+                            <Ionicons
+                                name={isPasswordVisible ? 'eye-off' : 'eye'}
+                                size={24}
+                                color="#666"
+                            />
+                        </TouchableOpacity>
+                    </View>
+
+                    {/* Confirm Password Input with Toggle */}
+                    <View style={styles.passwordContainer}>
+                        <TextInput
+                            style={styles.passwordInput}
+                            placeholder="Confirm Password"
+                            secureTextEntry={!isConfirmPasswordVisible} // Toggle visibility
+                            value={confirmPassword}
+                            onChangeText={setConfirmPassword}
+                        />
+                        <TouchableOpacity onPress={() => setConfirmPasswordVisibility(!isConfirmPasswordVisible)} style={styles.visibilityToggle}>
+                            <Ionicons
+                                name={isConfirmPasswordVisible ? 'eye-off' : 'eye'}
+                                size={24}
+                                color="#666"
+                            />
+                        </TouchableOpacity>
+                    </View>
                     {errorpassword ? <Text style={styles.errorText}>{errorpassword}</Text> : null}
 
-                    <TouchableOpacity style={styles.signUpButton} onPress={() => updateUser(userID)}>
-                        <Text style={styles.signUpButtonText}>Submit</Text>
+                    <TouchableOpacity style={styles.updateButton} onPress={() => updateUser(userID)}>
+                        <Text style={styles.updateButtonText}>Submit</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
@@ -194,12 +212,6 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 20,
     },
-    subtitle: {
-        fontSize: 20,
-        color: '#666',
-        marginBottom: 20,
-        fontFamily: 'Poppins-SemiBold',
-    },
     input: {
         fontFamily: 'Poppins-Regular',
         backgroundColor: '#FFF',
@@ -215,35 +227,30 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5,
     },
-    phoneInput: {
+    passwordContainer: {
         flexDirection: 'row',
-        borderWidth: 1,
-        borderColor: '#ddd',
+        alignItems: 'center',
         backgroundColor: '#FFF',
-        padding: 5,
+        padding: 15,
         borderRadius: 10,
-        fontSize: 16,
+        borderColor: '#DDD',
+        borderWidth: 1,
         marginBottom: 20,
-        fontFamily: 'Poppins-Regular',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
     },
-    phonePrefix: {
-        padding: 15,
-        borderRightWidth: 1,
-        borderRightColor: '#ddd',
-        fontFamily: 'Poppins-Regular'
-    },
-    phoneNumber: {
+    passwordInput: {
         flex: 1,
-        padding: 10,
-        fontFamily: 'Poppins-Regular',
         fontSize: 16,
+        fontFamily: 'Poppins-Regular',
     },
-    signUpButton: {
+    visibilityToggle: {
+        paddingHorizontal: 10,
+    },
+    updateButton: {
         backgroundColor: '#379137',
         paddingVertical: 15,
         paddingHorizontal: 40,
@@ -258,38 +265,16 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5,
     },
-    signUpButtonText: {
+    updateButtonText: {
         fontSize: 18,
         color: '#FFF',
-        fontFamily: 'Poppins-SemiBold'
-    },
-    loginContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginTop: 10,
-    },
-    loginText: {
-        fontSize: 14,
-        fontFamily: 'Poppins-Regular',
-    },
-    loginLink: {
-        fontSize: 14,
-        color: '#379137',
-        fontWeight: 'bold',
-        fontFamily: 'Poppins-Regular',
-    },
-    termsText: {
-        fontSize: 12,
-        textAlign: 'center',
-        marginTop: 10,
-        color: '#888',
-        fontFamily: 'Poppins-Regular',
+        fontFamily: 'Poppins-SemiBold',
     },
     errorText: {
         color: "red",
         marginTop: -15,
         marginBottom: 10,
-        fontFamily: 'Poppins-Regular'
+        fontFamily: 'Poppins-Regular',
     },
 });
 

@@ -4,6 +4,7 @@ import { Link, useRouter } from 'expo-router';
 import { useNavigation } from "@react-navigation/native";
 import axios from 'axios';
 import { API_URL } from "@env";
+import { Ionicons } from '@expo/vector-icons'; // Import Ionicons for icons
 
 const SignupScreen = () => {
     const navigation = useNavigation();
@@ -16,6 +17,8 @@ const SignupScreen = () => {
     const [error, setError] = useState("");
     const [errorpassword, setErrorPassword] = useState("");
     const [emailError, setEmailError] = useState("");
+    const [isPasswordVisible, setPasswordVisibility] = useState(false); // State for password visibility
+    const [isConfirmPasswordVisible, setConfirmPasswordVisibility] = useState(false); // State for confirm password visibility
 
     const requestOTP = async () => {
         try {
@@ -114,20 +117,42 @@ const SignupScreen = () => {
                         />
                     </View>
                     {error ? <Text style={styles.errorText}>{error}</Text> : null}
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Password"
-                        secureTextEntry
-                        value={password}
-                        onChangeText={setPassword}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Confirm Password"
-                        secureTextEntry
-                        value={confirmPassword}
-                        onChangeText={setConfirmPassword}
-                    />
+
+                    {/* Password Input with Toggle */}
+                    <View style={styles.passwordContainer}>
+                        <TextInput
+                            style={styles.passwordInput}
+                            placeholder="Password"
+                            secureTextEntry={!isPasswordVisible} // Toggle visibility
+                            value={password}
+                            onChangeText={setPassword}
+                        />
+                        <TouchableOpacity onPress={() => setPasswordVisibility(!isPasswordVisible)} style={styles.visibilityToggle}>
+                            <Ionicons
+                                name={isPasswordVisible ? 'eye-off' : 'eye'}
+                                size={24}
+                                color="#666"
+                            />
+                        </TouchableOpacity>
+                    </View>
+
+                    {/* Confirm Password Input with Toggle */}
+                    <View style={styles.passwordContainer}>
+                        <TextInput
+                            style={styles.passwordInput}
+                            placeholder="Confirm Password"
+                            secureTextEntry={!isConfirmPasswordVisible} // Toggle visibility
+                            value={confirmPassword}
+                            onChangeText={setConfirmPassword}
+                        />
+                        <TouchableOpacity onPress={() => setConfirmPasswordVisibility(!isConfirmPasswordVisible)} style={styles.visibilityToggle}>
+                            <Ionicons
+                                name={isConfirmPasswordVisible ? 'eye-off' : 'eye'}
+                                size={24}
+                                color="#666"
+                            />
+                        </TouchableOpacity>
+                    </View>
                     {errorpassword ? <Text style={styles.errorText}>{errorpassword}</Text> : null}
 
                     <TouchableOpacity style={styles.signUpButton} onPress={handleSignup}>
@@ -210,6 +235,29 @@ const styles = StyleSheet.create({
         padding: 10,
         fontFamily: 'Poppins-Regular',
         fontSize: 16,
+    },
+    passwordContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#FFF',
+        padding: 15,
+        borderRadius: 10,
+        borderColor: '#DDD',
+        borderWidth: 1,
+        marginBottom: 20,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    passwordInput: {
+        flex: 1,
+        fontSize: 16,
+        fontFamily: 'Poppins-Regular',
+    },
+    visibilityToggle: {
+        paddingHorizontal: 10,
     },
     signUpButton: {
         backgroundColor: '#379137',
