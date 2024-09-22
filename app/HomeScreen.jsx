@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet, SafeAreaView, Image, Linking } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const CategoryItem = ({ icon, title, route }) => {
     const router = useRouter();
@@ -32,13 +33,30 @@ const InfoCard = ({ title, description, videoId }) => (
 
 const HomeScreen = () => {
     const router = useRouter();
+    const [userName, setUserName] = useState('');
+
+    useEffect(() => {
+        const getUserDetails = async () => {
+            try {
+                const userDetailsString = await AsyncStorage.getItem('userDetails');
+                if (userDetailsString) {
+                    const userDetails = JSON.parse(userDetailsString);
+                    setUserName(userDetails.name);
+                }
+            } catch (error) {
+                console.error("Error fetching user details:", error);
+            }
+        };
+
+        getUserDetails();
+    }, []);
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContent}>
                 <View style={styles.header}>
                     <View>
                         <Text style={styles.welcomeText}>Welcome</Text>
-                        <Text style={styles.userName}>Abhishek Peiris</Text>
+                        <Text style={styles.userName}>{userName}</Text>
                     </View>
                     <TouchableOpacity>
                         <Icon name="bell-outline" size={24} color="#000" />
@@ -95,7 +113,7 @@ const HomeScreen = () => {
                     <Text style={styles.navText}>Notification</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem}>
-                    <Icon name="account" size={24} color="#888" />
+                    <Icon name="account" size={24} color="#888" onPress={() => router.push('/UserProfileScreen')} />
                     <Text style={styles.navText}>Profile</Text>
                 </TouchableOpacity>
             </View>
@@ -141,8 +159,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     categoryIcon: {
-        width: 50,
-        height: 50,
+        width: 65,
+        height: 65,
         borderRadius: 10,
         backgroundColor: '#379137',
         justifyContent: 'center',

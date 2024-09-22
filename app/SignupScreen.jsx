@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert, ScrollView } from 'react-native';
 import { Link, useRouter } from 'expo-router';
 import { useNavigation } from "@react-navigation/native";
 import axios from 'axios';
@@ -15,6 +15,7 @@ const SignupScreen = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState("");
     const [errorpassword, setErrorPassword] = useState("");
+    const [emailError, setEmailError] = useState("");
 
     const requestOTP = async () => {
         try {
@@ -27,7 +28,7 @@ const SignupScreen = () => {
                     email,
                     contact,
                     password,
-                    otp: response.data.otp // Pass the OTP to the OTPVerificationScreen
+                    otp: response.data.otp
                 });
             } else {
                 Alert.alert('Error', 'Failed to generate OTP');
@@ -35,6 +36,11 @@ const SignupScreen = () => {
         } catch (error) {
             Alert.alert('Error', error.response?.data?.message || 'Failed to send OTP');
         }
+    };
+
+    const validateEmail = (email) => {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(email).toLowerCase());
     };
 
     const handleSignup = async () => {
@@ -48,6 +54,12 @@ const SignupScreen = () => {
             Alert.alert('Warning', 'Please fill in all required fields');
             return;
         }
+
+        if (!validateEmail(email)) {
+            setEmailError('Please enter a valid email address');
+            return;
+        }
+        setEmailError("");
 
         if (name && email && contact && password) {
             const numericValue = contact.replace(/[^0-9]/g, "");
@@ -69,66 +81,71 @@ const SignupScreen = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.content}>
-                <Text style={styles.subtitle}>Create a new account</Text>
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+                <View style={styles.content}>
+                    <Text style={styles.subtitle}>Create a new account</Text>
 
-                <TextInput
-                    style={styles.input}
-                    placeholder="Name"
-                    value={name}
-                    onChangeText={setName}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="E-mail"
-                    value={email}
-                    onChangeText={setEmail}
-                    keyboardType="email-address"
-                />
-                <View style={styles.phoneInput}>
-                    <Text style={styles.phonePrefix}>+94</Text>
                     <TextInput
-                        style={styles.phoneNumber}
-                        placeholder="Phone number"
-                        keyboardType="phone-pad"
-                        maxLength={9}
-                        value={contact}
-                        onChangeText={setContact}
+                        style={styles.input}
+                        placeholder="Name"
+                        value={name}
+                        onChangeText={setName}
                     />
-                    
+                    <TextInput
+                        style={styles.input}
+                        placeholder="E-mail"
+                        value={email}
+                        onChangeText={(text) => {
+                            setEmail(text);
+                            setEmailError("");
+                        }}
+                        keyboardType="email-address"
+                    />
+                    {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+                    <View style={styles.phoneInput}>
+                        <Text style={styles.phonePrefix}>+94</Text>
+                        <TextInput
+                            style={styles.phoneNumber}
+                            placeholder="Phone number"
+                            keyboardType="phone-pad"
+                            maxLength={9}
+                            value={contact}
+                            onChangeText={setContact}
+                        />
+                    </View>
+                    {error ? <Text style={styles.errorText}>{error}</Text> : null}
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Password"
+                        secureTextEntry
+                        value={password}
+                        onChangeText={setPassword}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Confirm Password"
+                        secureTextEntry
+                        value={confirmPassword}
+                        onChangeText={setConfirmPassword}
+                    />
+                    {errorpassword ? <Text style={styles.errorText}>{errorpassword}</Text> : null}
+
+                    <TouchableOpacity style={styles.signUpButton} onPress={handleSignup}>
+                        <Text style={styles.signUpButtonText}>SIGN UP</Text>
+                    </TouchableOpacity>
+
+                    <View style={styles.loginContainer}>
+                        <Text style={styles.loginText}>Have an account? </Text>
+                        <Link href='/LoginScreen'>
+                            <Text style={styles.loginLink}>Log in</Text>
+                        </Link>
+                    </View>
+
+                    <Text style={styles.termsText}>
+                        By clicking "SIGN UP" you agree to our terms of service and Privacy Policy
+                    </Text>
                 </View>
-                {error ? <Text style={styles.errorText}>{error}</Text> : null}
-                <TextInput
-                    style={styles.input}
-                    placeholder="Password"
-                    secureTextEntry
-                    value={password}
-                    onChangeText={setPassword}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Confirm Password"
-                    secureTextEntry
-                    value={confirmPassword}
-                    onChangeText={setConfirmPassword}
-                />
-                {errorpassword ? <Text style={styles.errorText}>{errorpassword}</Text> : null}
-
-                <TouchableOpacity style={styles.signUpButton} onPress={handleSignup}>
-                    <Text style={styles.signUpButtonText}>SIGN UP</Text>
-                </TouchableOpacity>
-
-                <View style={styles.loginContainer}>
-                    <Text style={styles.loginText}>Have an account? </Text>
-                    <Link href='/LoginScreen'>
-                        <Text style={styles.loginLink}>Log in</Text>
-                    </Link>
-                </View>
-
-                <Text style={styles.termsText}>
-                    By clicking "SIGN UP" you agree to our terms of service and Privacy Policy
-                </Text>
-            </View>
+            </ScrollView>
         </SafeAreaView>
     );
 };
@@ -137,6 +154,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#FFF',
+    },
+    scrollViewContent: {
+        flexGrow: 1,
     },
     content: {
         flex: 1,
@@ -157,13 +177,10 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         borderColor: '#DDD',
         borderWidth: 1,
-
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-
-        // Shadow for Android (elevation)
         elevation: 5,
     },
     phoneInput: {
@@ -176,13 +193,10 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginBottom: 20,
         fontFamily: 'Poppins-Regular',
-
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-
-        // Shadow for Android (elevation)
         elevation: 5,
     },
     phonePrefix: {
@@ -197,25 +211,8 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins-Regular',
         fontSize: 16,
     },
-    checkboxContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 20,
-    },
-    checkbox: {
-        width: 20,
-        height: 20,
-        borderWidth: 1,
-        borderColor: '#ddd',
-        marginRight: 10,
-        backgroundColor: '#FFF',
-    },
-    checkboxLabel: {
-        fontSize: 14,
-        fontFamily: 'Poppins-Regular',
-    },
     signUpButton: {
-        backgroundColor: '#379137',  // Green button background
+        backgroundColor: '#379137',
         paddingVertical: 15,
         paddingHorizontal: 40,
         borderRadius: 10,
@@ -223,14 +220,10 @@ const styles = StyleSheet.create({
         height: 50,
         width: '100%',
         alignItems: 'center',
-
-        // Shadow properties for iOS/web
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-
-        // Shadow for Android (elevation)
         elevation: 5,
     },
     signUpButtonText: {

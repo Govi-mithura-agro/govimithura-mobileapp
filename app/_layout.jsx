@@ -218,6 +218,16 @@ export default function App() {
           headerStyle: { backgroundColor: "#379137" },
         }}
       />
+      <Stack.Screen
+        name="UserProfileScreen"
+        options={{
+          headerShown: true,
+          headerTitle: "User Profile",
+          headerShadowVisible: false,
+          headerTintColor: "black",
+          headerStyle: { backgroundColor: "#FFF" },
+        }}
+      />
     </Stack>
     
   );
