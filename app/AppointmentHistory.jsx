@@ -84,9 +84,9 @@ const AppointmentHistory = () => {
                             );
                             // Refresh appointments after cancelling
                             const response = await axios.post(
-                                `${API_URL}:5000/api/appoinments/getappointments`
+                                `${API_URL}:5000/api/appoinments/getappointments/${userDetails.email}`
                             );
-                            setAppointment(response.data.appointments);
+                            setAppointment(response.data.appointment);
                             closeModal();
                         } catch (error) {
                             console.log("Error cancelling appointment", error);
