@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'; // <-- Add this import
 import React, { useCallback, useEffect, useState } from "react";
 import {
     View,
@@ -8,6 +9,7 @@ import {
     Modal,
     Button,
     Alert,
+    Image,
 } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -21,21 +23,36 @@ const AppointmentHistory = () => {
     const [appointment, setAppointment] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedAppointment, setSelectedAppointment] = useState(null);
+    const [userDetails, setUserDetails] = useState(null);
 
     useFocusEffect(
         useCallback(() => {
-            async function fetchAppointments() {
+            const getUserDetails = async () => {
                 try {
-                    const response = await axios.post(
-                        `${API_URL}:5000/api/appoinments/getappointments`
-                    );
-                    setAppointment(response.data.appointments);
+                    const userDetailsString = await AsyncStorage.getItem('userDetails');
+                    if (userDetailsString) {
+                        setUserDetails(JSON.parse(userDetailsString));
+                    }
                 } catch (error) {
-                    console.log(error);
+                    console.error("Error fetching user details:", error);
+                }
+            };
+            getUserDetails();
+
+            async function fetchAppointments() {
+                if (userDetails) {
+                    try {
+                        const response = await axios.post(
+                            `${API_URL}:5000/api/appoinments/getappointments/${userDetails.email}`
+                        );
+                        setAppointment(response.data.appointment);
+                    } catch (error) {
+                        console.log(error);
+                    }
                 }
             }
             fetchAppointments();
-        }, [])
+        }, [userDetails]) // Add userDetails to dependency array
     );
 
     const handleViewAppointment = (appointment) => {
@@ -46,6 +63,7 @@ const AppointmentHistory = () => {
     const closeModal = () => {
         setModalVisible(false); // Close modal
     };
+
     const CancelAppointment = (id) => {
         // Show confirmation alert before cancelling
         Alert.alert(
@@ -118,6 +136,13 @@ const AppointmentHistory = () => {
         <View style={styles.container}>
             <Text style={styles.header}>My Appointments</Text>
             <ScrollView style={styles.scrollView}>
+                {appointment.length === 0 && (
+                    <Image
+                        source={require('../assets/notfoundr.png')}  // Update the path according to your project
+                        style={styles.logo}
+                        resizeMode="contain"
+                    />
+                )}
                 {appointment.map((appointment) => (
                     <View key={appointment.id} style={styles.appointmentContainer}>
                         <View style={styles.appointmentHeader}>
@@ -323,7 +348,14 @@ const styles = StyleSheet.create({
         fontSize: 14,
         marginTop: 5,
         fontFamily: 'Poppins-Regular'
-    }
+    },
+    logo: {
+        width: 200,  // Adjust based on your image size
+        height: 200, // Adjust based on your image size
+        marginBottom: 30,  // Space between logo and Welcome text
+        marginLeft: '20%',  // Space between logo and input fields
+        marginTop: '50%',  // Space between logo and input fields
+    },
 });
 
 export default AppointmentHistory;
