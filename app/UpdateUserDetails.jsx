@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert, ScrollView } from 'react-native';
-import { Link, useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from "expo-router";
 import { useNavigation } from "@react-navigation/native";
 import axios from 'axios';
 import { API_URL } from "@env";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SignupScreen = () => {
+const UpdateUserDetails = () => {
     const navigation = useNavigation();
     const router = useRouter();
     const [name, setName] = useState('');
@@ -18,10 +18,14 @@ const SignupScreen = () => {
     const [errorpassword, setErrorPassword] = useState("");
     const [emailError, setEmailError] = useState("");
 
+    const [userID, setUserID] = useState(null);
+    
 
-    useEffect(() => {
-        getUserDetails();
-    }, []);
+    useFocusEffect(
+        useCallback(() => {
+            getUserDetails();
+        }, []) 
+    );
 
     const getUserDetails = async () => {
         try {
@@ -32,19 +36,16 @@ const SignupScreen = () => {
                 setContact(JSON.parse(userDetailsString).contact);
                 setPassword(JSON.parse(userDetailsString).password);
                 setConfirmPassword(JSON.parse(userDetailsString).password);
+
+                setUserID(JSON.parse(userDetailsString)._id);
             }
         } catch (error) {
             console.error("Error fetching user details:", error);
         }
     };
 
+    async function updateUser(id) {
 
-    const validateEmail = (email) => {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(String(email).toLowerCase());
-    };
-
-    const handleSignup = async () => {
         if (password !== confirmPassword) {
             setErrorPassword('Passwords do not match');
             return;
@@ -74,11 +75,52 @@ const SignupScreen = () => {
             }
             setContact(numericValue);
             setError("");
-            await requestOTP();
         } else {
             Alert.alert("Warning", "Please fill in all required fields");
         }
+
+        try {
+            const response = await axios.put(`${API_URL}:5000/api/appuser/edituser/${id}`, {
+                name: name,
+                email: email,
+                contact: contact,
+                password: password
+            });
+
+            if (response.status === 200) {
+                const userDetails = {
+                    _id: id,
+                    name: name,
+                    email: email,
+                    contact: contact,
+                    password: password
+                }
+
+                await AsyncStorage.setItem('userDetails', JSON.stringify(userDetails));
+
+                Alert.alert(
+                    "Success",
+                    "User details updated successfully",
+                    [
+                        {
+                            text: "OK",
+                            onPress: () => navigation.navigate('UserProfileScreen', { refresh: true })
+                        }
+                    ]
+                );
+            }
+        } catch (error) {
+            console.error("Error updating user details:", error);
+            Alert.alert("Error", "Failed to update user details. Please try again.");
+        }
+    }
+
+
+    const validateEmail = (email) => {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(email).toLowerCase());
     };
+
 
     return (
         <SafeAreaView style={styles.container}>
@@ -131,7 +173,7 @@ const SignupScreen = () => {
                     />
                     {errorpassword ? <Text style={styles.errorText}>{errorpassword}</Text> : null}
 
-                    <TouchableOpacity style={styles.signUpButton}>
+                    <TouchableOpacity style={styles.signUpButton} onPress={() => updateUser(userID)}>
                         <Text style={styles.signUpButtonText}>Submit</Text>
                     </TouchableOpacity>
                 </View>
@@ -251,4 +293,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SignupScreen;
+export default UpdateUserDetails;

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -8,11 +8,7 @@ const UserProfileScreen = () => {
     const router = useRouter();
     const [userDetails, setUserDetails] = useState(null);
 
-    useEffect(() => {
-        getUserDetails();
-    }, []);
-
-    const getUserDetails = async () => {
+    const getUserDetails = useCallback(async () => {
         try {
             const userDetailsString = await AsyncStorage.getItem('userDetails');
             if (userDetailsString) {
@@ -21,7 +17,13 @@ const UserProfileScreen = () => {
         } catch (error) {
             console.error("Error fetching user details:", error);
         }
-    };
+    }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            getUserDetails();
+        }, [getUserDetails])
+    );
 
     const handleLogout = async () => {
         try {
