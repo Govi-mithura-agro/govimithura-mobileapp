@@ -134,6 +134,26 @@ const CropPrediction = () => {
                             "Rainfall": `${cropFactor.rainfall} mm`,
                             "Humidity": `${cropFactor.humidity} %`,
                         })}
+                        {renderCropFactorSection("Geographical Factors", {
+                            "Altitude": `${cropFactor.altitude} m`,
+                            "Topography": `${cropFactor.topography}`,
+                        })}
+                        {renderCropFactorSection("Water Availability", {
+                            "Irrigation Systems": `${cropFactor.irrigationsystems}`,
+                            "Water Quality": `${cropFactor.waterquality}`,
+                        })}
+                        {renderCropFactorSection("Crop Type", {
+                            "Variety Selection": `${cropFactor.varietyselection}`,
+                            "Growth Cycle": `${cropFactor.growthcycle}`,
+                        })}
+                        {renderCropFactorSection("Pests and Diseases", {
+                            "Pest Pressure": `${cropFactor.pestpressure}`,
+                            "Disease Incidence": `${cropFactor.diseaseincidence}`,
+                        })}
+                        {renderCropFactorSection("Farming Practices", {
+                            "Crop Rotation ": `${cropFactor.croprotation}`,
+                            "Fertilizer Use": `${cropFactor.fertilizeruse}`,
+                        })}
                         {/* Add more sections as needed */}
                     </>
                 ) : null}
@@ -143,15 +163,18 @@ const CropPrediction = () => {
                 {crops && crops.length > 0 ? (
                     <View style={styles.tableContainer}>
                         <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>
-                            <Row data={['Crop', 'Name', 'Scientific Name', 'Season']} style={styles.tableHeader} textStyle={styles.tableHeaderText} />
+                            <Row data={['Crop', 'Name', 'Season', 'Soil Type', 'Growth Duration (days)', 'Average Yield (tons/ha)','Water Requirements']} style={styles.tableHeader} textStyle={styles.tableHeaderText} />
                             {crops.map((crop, index) => (
                                 <TouchableOpacity key={index} onPress={() => toggleModal(crop)}>
                                     <Row
                                         data={[
                                             <Image source={{ uri: crop.crop[0] }} style={styles.cropImage} />,
                                             crop.cropName,
-                                            crop.scientificName,
-                                            crop.plantingSeason
+                                            crop.plantingSeason,
+                                            crop.soilType,
+                                            crop.growthDuration,
+                                            crop.averageYield,
+                                            crop.waterRequirements,
                                         ]}
                                         style={index % 2 && styles.tableRowEven}
                                         textStyle={styles.tableRowText}
