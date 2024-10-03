@@ -5,15 +5,17 @@ import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { API_URL } from "@env";
+import { Ionicons } from '@expo/vector-icons';  // Import icon library
 
 const LoginScreen = () => {
     const router = useRouter();
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isPasswordVisible, setPasswordVisibility] = useState(false);  // State to control password visibility
 
     const handleLogin = async () => {
-        if (!email ||!password) {
+        if (!email || !password) {
             Alert.alert("Login Failed", "Please enter both email and password");
             return;
         }
@@ -39,6 +41,10 @@ const LoginScreen = () => {
         }
     };
 
+    const togglePasswordVisibility = () => {
+        setPasswordVisibility(!isPasswordVisible);  // Toggle password visibility
+    };
+
     return (
         <View style={styles.container}>
             <Image
@@ -57,13 +63,22 @@ const LoginScreen = () => {
                 keyboardType="email-address"
             />
 
-            <TextInput
-                style={styles.input}
-                placeholder="Password"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-            />
+            <View style={styles.passwordContainer}>
+                <TextInput
+                    style={styles.passwordInput}
+                    placeholder="Password"
+                    value={password}
+                    onChangeText={setPassword}
+                    secureTextEntry={!isPasswordVisible}  // Toggle visibility based on state
+                />
+                <TouchableOpacity onPress={togglePasswordVisibility} style={styles.visibilityToggle}>
+                    <Ionicons
+                        name={isPasswordVisible ? 'eye-off' : 'eye'}
+                        size={24}
+                        color="#666"
+                    />
+                </TouchableOpacity>
+            </View>
 
             <TouchableOpacity style={styles.forgotPasswordLink} onPress={() => navigation.navigate('ForgotPasswordScreen')}>
                 <Text style={styles.forgotPassword}>Forgot Password?</Text>
@@ -110,8 +125,31 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
 
-        // Shadow for Android (elevation)
         elevation: 5,
+    },
+    passwordContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#FFF',
+        padding: 15,
+        borderRadius: 10,
+        borderColor: '#DDD',
+        borderWidth: 1,
+        marginBottom: 20,
+
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    passwordInput: {
+        flex: 1,
+        fontSize: 16,
+        fontFamily: 'Poppins-Regular',
+    },
+    visibilityToggle: {
+        paddingHorizontal: 10,
     },
     forgotPassword: {
         fontSize: 14,
@@ -119,7 +157,7 @@ const styles = StyleSheet.create({
         marginBottom: 0,
     },
     loginButton: {
-        backgroundColor: '#379137',  // Green button background
+        backgroundColor: '#379137',
         paddingVertical: 15,
         paddingHorizontal: 40,
         borderRadius: 10,
@@ -128,13 +166,10 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
 
-        // Shadow properties for iOS/web
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
-
-        // Shadow for Android (elevation)
         elevation: 5,
     },
     loginButtonText: {
@@ -159,14 +194,13 @@ const styles = StyleSheet.create({
     },
     forgotPasswordLink: {
         marginBottom: 30,
-        fontFamily: 'Poppins-Regular',
     },
     logo: {
-        width: 150, 
-        height: 150, 
-        marginBottom: -10, 
+        width: 150,
+        height: 150,
+        marginBottom: -10,
         marginTop: -20,
-        marginLeft: '25%',  // Space between logo and input fields
+        marginLeft: '25%',
     },
 });
 

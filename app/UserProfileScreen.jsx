@@ -1,27 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
-import { useRouter } from 'expo-router';
+import React, { useState, useCallback } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, SafeAreaView, Alert } from 'react-native';
+import { useRouter, useFocusEffect } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import axios from "axios";
+import { API_URL } from "@env";
 
 const UserProfileScreen = () => {
     const router = useRouter();
     const [userDetails, setUserDetails] = useState(null);
+    const [userID, setUserID] = useState(null);
 
-    useEffect(() => {
-        getUserDetails();
-    }, []);
-
-    const getUserDetails = async () => {
+    const getUserDetails = useCallback(async () => {
         try {
             const userDetailsString = await AsyncStorage.getItem('userDetails');
             if (userDetailsString) {
                 setUserDetails(JSON.parse(userDetailsString));
+                setUserID(JSON.parse(userDetailsString)._id);
             }
         } catch (error) {
             console.error("Error fetching user details:", error);
         }
-    };
+    }, []);
+
+    useFocusEffect(
+        useCallback(() => {
+            getUserDetails();
+        }, [getUserDetails])
+    );
 
     const handleLogout = async () => {
         try {
@@ -30,6 +36,35 @@ const UserProfileScreen = () => {
         } catch (error) {
             console.error("Error logging out:", error);
         }
+    };
+
+    const DeleteUser = (id) => {
+        // Show confirmation alert before cancelling
+        Alert.alert(
+            "Delete Account",
+            "Are you sure you want to delete your account?",
+            [
+                {
+                    text: "No",
+                    onPress: () => console.log("Cancel Pressed"),
+                    style: "cancel",
+                },
+                {
+                    text: "Yes",
+                    onPress: async () => {
+                        try {
+                            await axios.delete(
+                                `${API_URL}:5000/api/appuser/deleteuser/${id}`
+                            );
+                            handleLogout();
+                        } catch (error) {
+                            console.log("Error deleting user", error);
+                        }
+                    },
+                },
+            ],
+            { cancelable: false }
+        );
     };
 
     if (!userDetails) {
@@ -70,7 +105,7 @@ const UserProfileScreen = () => {
                     </View>
                 </View>
 
-                <TouchableOpacity style={styles.editButton} onPress={() => router.push('/EditProfile')}>
+                <TouchableOpacity style={styles.editButton} onPress={() => router.push('/UpdateUserDetails')}>
                     <Text style={styles.editButtonText}>Edit Profile</Text>
                 </TouchableOpacity>
 
@@ -78,7 +113,7 @@ const UserProfileScreen = () => {
                     <Text style={styles.logoutButtonText}>Logout</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.deleteaccuntlink}>
+                <TouchableOpacity style={styles.deleteaccuntlink} onPress={() => DeleteUser(userID)}>
                     <Text style={styles.deleteaccuntlinkText}>Delete account</Text>
                 </TouchableOpacity>
             </ScrollView>

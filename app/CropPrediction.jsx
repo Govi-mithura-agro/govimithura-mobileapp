@@ -9,7 +9,7 @@ import { API_URL } from '@env';
 const CropPrediction = () => {
     const [locations, setLocations] = useState([]);
     const [cropFactor, setCropFactor] = useState(null);
-    const [crops, setCrops] = useState(null);
+    const [crops, setCrops] = useState([]);
     const [selectedDistrict, setSelectedDistrict] = useState("Colombo");
     const [selectedProvince, setSelectedProvince] = useState("Western");
     const [notFound, setNotFound] = useState(false);
@@ -17,7 +17,6 @@ const CropPrediction = () => {
     const [selectedCrop, setSelectedCrop] = useState(null);
 
     useEffect(() => {
-        // Fetch locations from the API
         const fetchLocations = async () => {
             try {
                 const response = await axios.get(`${API_URL}:5000/api/locations`);
@@ -29,28 +28,26 @@ const CropPrediction = () => {
         fetchLocations();
     }, []);
 
-    //Fetch crop factors for the default district (Colombo) and Fetch crops for the default province (Western)
     useEffect(() => {
         fetchCropFactorsAndCrops(selectedDistrict, selectedProvince);
     }, [selectedDistrict, selectedProvince]);
 
-    //Function to fetch crop factors based on district and crops based on province
     const fetchCropFactorsAndCrops = (district, province) => {
         axios
             .get(`${API_URL}:5000/api/cropfactors/getcropfactors/${district}`)
             .then((response) => {
                 if (response.data && response.data.cropfactor) {
                     setCropFactor(response.data.cropfactor);
-                    setNotFound(false); //Reset the notFound state
+                    setNotFound(false);
                 } else {
                     setCropFactor(null);
-                    setNotFound(true); //Set notFound to true when no data is found
+                    setNotFound(true);
                 }
             })
             .catch((error) => {
                 console.error("Error fetching crop factors:", error);
                 setCropFactor(null);
-                setNotFound(true); //Set notFound to true when an error occurs
+                setNotFound(true);
             });
 
         axios
@@ -58,14 +55,14 @@ const CropPrediction = () => {
             .then((response) => {
                 if (response.data && response.data.crop) {
                     setCrops(response.data.crop);
-                    setNotFound(false); //Reset the notFound state
+                    setNotFound(false);
                 } else {
-                    setCrops(null);
+                    setCrops([]);
                 }
             })
             .catch((error) => {
                 console.error("Error fetching crops:", error);
-                setCrops(null);
+                setCrops([]);
             });
     };
 
@@ -76,8 +73,14 @@ const CropPrediction = () => {
     };
 
     const toggleModal = (crop) => {
-        setSelectedCrop(crop);
-        setModalVisible(!isModalVisible);
+        if (isModalVisible) {
+            setModalVisible(false);
+            // Delay clearing the selected crop to avoid undefined error
+            setTimeout(() => setSelectedCrop(null), 300);
+        } else {
+            setSelectedCrop(crop);
+            setModalVisible(true);
+        }
     };
 
     const renderCropFactorSection = (title, data) => (
@@ -134,6 +137,26 @@ const CropPrediction = () => {
                             "Rainfall": `${cropFactor.rainfall} mm`,
                             "Humidity": `${cropFactor.humidity} %`,
                         })}
+                        {renderCropFactorSection("Geographical Factors", {
+                            "Altitude": `${cropFactor.altitude} m`,
+                            "Topography": `${cropFactor.topography}`,
+                        })}
+                        {renderCropFactorSection("Water Availability", {
+                            "Irrigation Systems": `${cropFactor.irrigationsystems}`,
+                            "Water Quality": `${cropFactor.waterquality}`,
+                        })}
+                        {renderCropFactorSection("Crop Type", {
+                            "Variety Selection": `${cropFactor.varietyselection}`,
+                            "Growth Cycle": `${cropFactor.growthcycle}`,
+                        })}
+                        {renderCropFactorSection("Pests and Diseases", {
+                            "Pest Pressure": `${cropFactor.pestpressure}`,
+                            "Disease Incidence": `${cropFactor.diseaseincidence}`,
+                        })}
+                        {renderCropFactorSection("Farming Practices", {
+                            "Crop Rotation ": `${cropFactor.croprotation}`,
+                            "Fertilizer Use": `${cropFactor.fertilizeruse}`,
+                        })}
                         {/* Add more sections as needed */}
                     </>
                 ) : null}
@@ -143,15 +166,18 @@ const CropPrediction = () => {
                 {crops && crops.length > 0 ? (
                     <View style={styles.tableContainer}>
                         <Table borderStyle={{ borderWidth: 1, borderColor: '#C1C0B9' }}>
-                            <Row data={['Crop', 'Name', 'Scientific Name', 'Season']} style={styles.tableHeader} textStyle={styles.tableHeaderText} />
+                            <Row data={['Crop', 'Name', 'Season', 'Soil Type', 'Growth Duration (days)', 'Average Yield (tons/ha)', 'Water Requirements']} style={styles.tableHeader} textStyle={styles.tableHeaderText} />
                             {crops.map((crop, index) => (
                                 <TouchableOpacity key={index} onPress={() => toggleModal(crop)}>
                                     <Row
                                         data={[
                                             <Image source={{ uri: crop.crop[0] }} style={styles.cropImage} />,
                                             crop.cropName,
-                                            crop.scientificName,
-                                            crop.plantingSeason
+                                            crop.plantingSeason,
+                                            crop.soilType,
+                                            crop.growthDuration,
+                                            crop.averageYield,
+                                            crop.waterRequirements,
                                         ]}
                                         style={index % 2 && styles.tableRowEven}
                                         textStyle={styles.tableRowText}
@@ -163,13 +189,14 @@ const CropPrediction = () => {
                 ) : null}
             </View>
 
-            <Modal isVisible={isModalVisible} onBackdropPress={toggleModal}>
+            {/* Modal */}
+            <Modal isVisible={isModalVisible} onBackdropPress={() => toggleModal()}>
                 {selectedCrop && (
                     <View style={styles.modalContent}>
                         <Image source={{ uri: selectedCrop.crop[0] }} style={styles.modalImage} />
                         <Text style={styles.modalTitle}>{selectedCrop.cropName}</Text>
                         <Text style={styles.modalDescription}>{selectedCrop.description}</Text>
-                        <TouchableOpacity onPress={toggleModal} style={styles.closeButton}>
+                        <TouchableOpacity onPress={() => toggleModal()} style={styles.closeButton}>
                             <Text style={styles.closeButtonText}>Close</Text>
                         </TouchableOpacity>
                     </View>

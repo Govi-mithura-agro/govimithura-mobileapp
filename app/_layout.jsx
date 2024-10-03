@@ -174,8 +174,8 @@ export default function App() {
           headerShown: true,
           headerTitle: "Update Appointment",
           headerShadowVisible: false,
-          headerTintColor: "white",
-          headerStyle: { backgroundColor: "#379137" },
+          headerTintColor: "black",
+          headerStyle: { backgroundColor: "#FFF" },
         }}
       />
       <Stack.Screen
@@ -184,8 +184,8 @@ export default function App() {
           headerShown: true,
           headerTitle: "Update Appointment",
           headerShadowVisible: false,
-          headerTintColor: "white",
-          headerStyle: { backgroundColor: "#379137" },
+          headerTintColor: "black",
+          headerStyle: { backgroundColor: "#FFF" },
         }}
       />
       <Stack.Screen
@@ -194,8 +194,8 @@ export default function App() {
           headerShown: true,
           headerTitle: "Update Appointment",
           headerShadowVisible: false,
-          headerTintColor: "white",
-          headerStyle: { backgroundColor: "#379137" },
+          headerTintColor: "black",
+          headerStyle: { backgroundColor: "#FFF" },
         }}
       />
       <Stack.Screen
@@ -204,8 +204,8 @@ export default function App() {
           headerShown: true,
           headerTitle: "Update Appointment",
           headerShadowVisible: false,
-          headerTintColor: "white",
-          headerStyle: { backgroundColor: "#379137" },
+          headerTintColor: "black",
+          headerStyle: { backgroundColor: "#FFF" },
         }}
       />
       <Stack.Screen
@@ -214,8 +214,8 @@ export default function App() {
           headerShown: true,
           headerTitle: "Update Appointment",
           headerShadowVisible: false,
-          headerTintColor: "white",
-          headerStyle: { backgroundColor: "#379137" },
+          headerTintColor: "black",
+          headerStyle: { backgroundColor: "#FFF" },
         }}
       />
       <Stack.Screen
@@ -223,6 +223,16 @@ export default function App() {
         options={{
           headerShown: true,
           headerTitle: "User Profile",
+          headerShadowVisible: false,
+          headerTintColor: "black",
+          headerStyle: { backgroundColor: "#FFF" },
+        }}
+      />
+      <Stack.Screen
+        name="UpdateUserDetails"
+        options={{
+          headerShown: true,
+          headerTitle: "Update User Details",
           headerShadowVisible: false,
           headerTintColor: "black",
           headerStyle: { backgroundColor: "#FFF" },
