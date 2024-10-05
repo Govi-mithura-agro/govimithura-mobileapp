@@ -91,19 +91,32 @@ const styles = StyleSheet.create({
         marginBottom: 16,
     },
     messageInput: {
-
+        fontFamily: 'Poppins-Regular',
         fontSize: 16,
     },
     continueButton: {
-        backgroundColor: '#379137',
-        borderRadius: 8,
-        padding: 16,
+        backgroundColor: '#379137',  // Green button background
+        paddingVertical: 15,
+        paddingHorizontal: 40,
+        borderRadius: 10,
+        marginVertical: 10,
+        height: 50,
+        width: '100%',
         alignItems: 'center',
+
+        // Shadow properties for iOS/web
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        // Shadow for Android (elevation)
+        elevation: 5,
     },
     continueButtonText: {
-        color: '#fff',
         fontSize: 18,
-        fontWeight: 'bold',
+        color: '#FFF',
+        fontFamily: 'Poppins-SemiBold',
     },
     bottomNav: {
         flexDirection: 'row',
@@ -119,10 +132,13 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginTop: 5,
         color: '#888',
+        fontFamily: 'Poppins-Regular'
     },
     activeNavText: {
         color: '#006B3E',
+        fontFamily: 'Poppins-Regular'
     },
 });
+
 
 export default AppointmentScreen;

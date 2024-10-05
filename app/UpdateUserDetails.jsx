@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, SafeAreaView, Alert, ScrollView } from 'react-native';
-import { Link, useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from "expo-router";
 import { useNavigation } from "@react-navigation/native";
 import axios from 'axios';
 import { API_URL } from "@env";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons'; // Import Ionicons for icons
 
-const SignupScreen = () => {
+const UpdateUserDetails = () => {
     const navigation = useNavigation();
     const router = useRouter();
     const [name, setName] = useState('');
@@ -17,36 +18,36 @@ const SignupScreen = () => {
     const [error, setError] = useState("");
     const [errorpassword, setErrorPassword] = useState("");
     const [emailError, setEmailError] = useState("");
-    const [isPasswordVisible, setPasswordVisibility] = useState(false); // State for password visibility
-    const [isConfirmPasswordVisible, setConfirmPasswordVisibility] = useState(false); // State for confirm password visibility
+    const [userID, setUserID] = useState(null);
 
-    const requestOTP = async () => {
+    // States to toggle password visibility
+    const [isPasswordVisible, setPasswordVisibility] = useState(false);
+    const [isConfirmPasswordVisible, setConfirmPasswordVisibility] = useState(false);
+
+    useFocusEffect(
+        useCallback(() => {
+            getUserDetails();
+        }, [])
+    );
+
+    const getUserDetails = async () => {
         try {
-            const response = await axios.post(`${API_URL}:5000/api/appuser/request-otp`, {
-                contact: `+94${contact}`
-            });
-            if (response.status === 200 && response.data.otp) {
-                navigation.navigate("OTPVerificationScreen", {
-                    name,
-                    email,
-                    contact,
-                    password,
-                    otp: response.data.otp
-                });
-            } else {
-                Alert.alert('Error', 'Failed to generate OTP');
+            const userDetailsString = await AsyncStorage.getItem('userDetails');
+            if (userDetailsString) {
+                const userDetails = JSON.parse(userDetailsString);
+                setName(userDetails.name);
+                setEmail(userDetails.email);
+                setContact(userDetails.contact);
+                setPassword(userDetails.password);
+                setConfirmPassword(userDetails.password);
+                setUserID(userDetails._id);
             }
         } catch (error) {
-            Alert.alert('Error', error.response?.data?.message || 'Failed to send OTP');
+            console.error("Error fetching user details:", error);
         }
     };
 
-    const validateEmail = (email) => {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(String(email).toLowerCase());
-    };
-
-    const handleSignup = async () => {
+    async function updateUser(id) {
         if (password !== confirmPassword) {
             setErrorPassword('Passwords do not match');
             return;
@@ -66,28 +67,65 @@ const SignupScreen = () => {
 
         if (name && email && contact && password) {
             const numericValue = contact.replace(/[^0-9]/g, "");
-            if (!numericValue.startsWith("7")) {
-                setError('Phone number must start with "7"');
+            if (!numericValue.startsWith("07")) {
+                setError('Phone number must start with "07"');
                 return;
             }
-            if (numericValue.length !== 9) {
-                setError("Phone number should be exactly 9 digits");
+            if (numericValue.length !== 10) {
+                setError("Phone number should be exactly 10 digits");
                 return;
             }
             setContact(numericValue);
             setError("");
-            await requestOTP();
         } else {
             Alert.alert("Warning", "Please fill in all required fields");
         }
+
+        try {
+            const response = await axios.put(`${API_URL}:5000/api/appuser/edituser/${id}`, {
+                name: name,
+                email: email,
+                contact: contact,
+                password: password
+            });
+
+            if (response.status === 200) {
+                const userDetails = {
+                    _id: id,
+                    name: name,
+                    email: email,
+                    contact: contact,
+                    password: password
+                }
+
+                await AsyncStorage.setItem('userDetails', JSON.stringify(userDetails));
+
+                Alert.alert(
+                    "Success",
+                    "User details updated successfully",
+                    [
+                        {
+                            text: "OK",
+                            onPress: () => navigation.navigate('UserProfileScreen', { refresh: true })
+                        }
+                    ]
+                );
+            }
+        } catch (error) {
+            console.error("Error updating user details:", error);
+            Alert.alert("Error", "Failed to update user details. Please try again.");
+        }
+    }
+
+    const validateEmail = (email) => {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(email).toLowerCase());
     };
 
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
                 <View style={styles.content}>
-                    <Text style={styles.subtitle}>Create a new account</Text>
-
                     <TextInput
                         style={styles.input}
                         placeholder="Name"
@@ -105,17 +143,15 @@ const SignupScreen = () => {
                         keyboardType="email-address"
                     />
                     {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
-                    <View style={styles.phoneInput}>
-                        <Text style={styles.phonePrefix}>+94</Text>
-                        <TextInput
-                            style={styles.phoneNumber}
-                            placeholder="Phone number"
-                            keyboardType="phone-pad"
-                            maxLength={9}
-                            value={contact}
-                            onChangeText={setContact}
-                        />
-                    </View>
+
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Phone number"
+                        keyboardType="phone-pad"
+                        maxLength={10}
+                        value={contact}
+                        onChangeText={setContact}
+                    />
                     {error ? <Text style={styles.errorText}>{error}</Text> : null}
 
                     {/* Password Input with Toggle */}
@@ -155,20 +191,9 @@ const SignupScreen = () => {
                     </View>
                     {errorpassword ? <Text style={styles.errorText}>{errorpassword}</Text> : null}
 
-                    <TouchableOpacity style={styles.signUpButton} onPress={handleSignup}>
-                        <Text style={styles.signUpButtonText}>Sign up</Text>
+                    <TouchableOpacity style={styles.updateButton} onPress={() => updateUser(userID)}>
+                        <Text style={styles.updateButtonText}>Submit</Text>
                     </TouchableOpacity>
-
-                    <View style={styles.loginContainer}>
-                        <Text style={styles.loginText}>Have an account? </Text>
-                        <Link href='/LoginScreen'>
-                            <Text style={styles.loginLink}>Log in</Text>
-                        </Link>
-                    </View>
-
-                    <Text style={styles.termsText}>
-                        By clicking "SIGN UP" you agree to our terms of service and Privacy Policy
-                    </Text>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -187,12 +212,6 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 20,
     },
-    subtitle: {
-        fontSize: 20,
-        color: '#666',
-        marginBottom: 20,
-        fontFamily: 'Poppins-SemiBold',
-    },
     input: {
         fontFamily: 'Poppins-Regular',
         backgroundColor: '#FFF',
@@ -207,34 +226,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
-    },
-    phoneInput: {
-        flexDirection: 'row',
-        borderWidth: 1,
-        borderColor: '#ddd',
-        backgroundColor: '#FFF',
-        padding: 5,
-        borderRadius: 10,
-        fontSize: 16,
-        marginBottom: 20,
-        fontFamily: 'Poppins-Regular',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3.84,
-        elevation: 5,
-    },
-    phonePrefix: {
-        padding: 15,
-        borderRightWidth: 1,
-        borderRightColor: '#ddd',
-        fontFamily: 'Poppins-Regular'
-    },
-    phoneNumber: {
-        flex: 1,
-        padding: 10,
-        fontFamily: 'Poppins-Regular',
-        fontSize: 16,
     },
     passwordContainer: {
         flexDirection: 'row',
@@ -259,7 +250,7 @@ const styles = StyleSheet.create({
     visibilityToggle: {
         paddingHorizontal: 10,
     },
-    signUpButton: {
+    updateButton: {
         backgroundColor: '#379137',
         paddingVertical: 15,
         paddingHorizontal: 40,
@@ -274,39 +265,17 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5,
     },
-    signUpButtonText: {
+    updateButtonText: {
         fontSize: 18,
         color: '#FFF',
-        fontFamily: 'Poppins-SemiBold'
-    },
-    loginContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginTop: 10,
-    },
-    loginText: {
-        fontSize: 14,
-        fontFamily: 'Poppins-Regular',
-    },
-    loginLink: {
-        fontSize: 14,
-        color: '#379137',
-        fontWeight: 'bold',
-        fontFamily: 'Poppins-Regular',
-    },
-    termsText: {
-        fontSize: 12,
-        textAlign: 'center',
-        marginTop: 10,
-        color: '#888',
-        fontFamily: 'Poppins-Regular',
+        fontFamily: 'Poppins-SemiBold',
     },
     errorText: {
         color: "red",
         marginTop: -15,
         marginBottom: 10,
-        fontFamily: 'Poppins-Regular'
+        fontFamily: 'Poppins-Regular',
     },
 });
 
-export default SignupScreen;
+export default UpdateUserDetails;

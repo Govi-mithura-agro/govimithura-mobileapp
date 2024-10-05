@@ -1,19 +1,37 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, ScrollView, Alert } from 'react-native'; // Import Alert here
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, SafeAreaView, StyleSheet, ScrollView, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import axios from "axios";
 import { API_URL } from '@env';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';  // <-- Import AsyncStorage
 
 const AppointmentSummaryScreen = () => {
     const router = useRouter();
     const navigation = useNavigation();
     const route = useRoute();
     const { district, phone, message } = route.params;
-    const [name, setName] = useState('Abhishek Peiris');
-    const [email, setEmail] = useState('abhisheklpeiris@gmail.com');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+
+    useEffect(() => {
+        const getUserDetails = async () => {
+            try {
+                const userDetailsString = await AsyncStorage.getItem('userDetails');
+                if (userDetailsString) {
+                    const userDetails = JSON.parse(userDetailsString);
+                    setName(userDetails.name);
+                    setEmail(userDetails.email);
+                }
+            } catch (error) {
+                console.error("Error fetching user details:", error);
+            }
+        };
+
+        getUserDetails();
+    }, []);
 
     const summaryData = {
         Name: name,
@@ -24,13 +42,14 @@ const AppointmentSummaryScreen = () => {
     };
 
     const attachments = [
+        // Add your attachments here, if any
         // { name: '67x28a077639.mp3', size: '00:04:53' },
         // { name: '87x28ag7064u4.png', size: '39 KB' },
     ];
 
     async function addAppointment() {
         try {
-            const response = await axios.post(`${API_URL}:5000/api/appoinments/addappointment`, { // Replace localhost with your IP
+            const response = await axios.post(`${API_URL}:5000/api/appoinments/addappointment`, {
                 name: name,
                 email: email,
                 contact: phone,
@@ -49,14 +68,12 @@ const AppointmentSummaryScreen = () => {
                         }
                     ]
                 );
-                
             }
         } catch (error) {
             console.error("Error adding appointment:", error);
             Alert.alert("Error", "Failed to add appointment. Please try again.");
         }
     }
-
 
     const renderSummaryItem = (label, value) => (
         <View style={styles.summaryItem} key={label}>
